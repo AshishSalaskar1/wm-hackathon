@@ -1,6 +1,6 @@
 # wm-hackathon
 
-> **Disclaimer:** *This application was created during a HVE workshop to demonstrate a Job Description (JD) matching use case. It is intended solely as a prototype and is not a production-ready solution.*
+> **Disclaimer:** *This application was created during a Hypervelocity Engineering (HVE) workshop to demonstrate a Job Description (JD) matching use case. It is intended solely as a prototype and is not a production-ready solution.*
 
 ## Business Use Case
 
