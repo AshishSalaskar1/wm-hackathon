@@ -6,8 +6,14 @@ from datetime import date, datetime, timezone
 from enum import StrEnum
 from typing import Annotated, Literal
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 
+from azure.core.credentials import AzureKeyCredential
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from azure.search.documents import SearchClient
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -25,6 +31,19 @@ from src.backend.ingestion import (
 )
 from src.backend.matching.retriever import apply_threshold, dense_retrieval, rank_shortlist
 from src.backend.matching.result_store import StoredMatchResult, get_result_store
+
+# ---------------------------------------------------------------------------
+# Credential helpers
+# ---------------------------------------------------------------------------
+
+
+def _get_search_credential() -> AzureKeyCredential | DefaultAzureCredential:
+    """Return an API-key credential when AZURE_SEARCH_API_KEY is set, else DefaultAzureCredential."""
+    api_key = os.getenv("AZURE_SEARCH_API_KEY")
+    if api_key:
+        return AzureKeyCredential(api_key)
+    return DefaultAzureCredential()
+
 
 # ---------------------------------------------------------------------------
 # Auth configuration
@@ -472,15 +491,16 @@ def _create_matching_clients() -> tuple[object, object, object] | None:
         azure_ad_token_provider=token_provider,
         api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01"),
     )
+    search_credential = _get_search_credential()
     supply_search_client = SearchClient(
         endpoint=search_endpoint,
         index_name=os.getenv("AZURE_SEARCH_SUPPLY_INDEX", "supply-profiles"),
-        credential=DefaultAzureCredential(),
+        credential=search_credential,
     )
     jd_search_client = SearchClient(
         endpoint=search_endpoint,
         index_name=os.getenv("AZURE_JD_SEARCH_INDEX_NAME", "jd-index"),
-        credential=DefaultAzureCredential(),
+        credential=search_credential,
     )
     return openai_client, supply_search_client, jd_search_client
 
@@ -527,8 +547,50 @@ async def health() -> dict[str, str]:
 
 @app.get("/demands", response_model=list[DemandRecord], tags=["demands"])
 async def list_demands(_user: CurrentUser) -> list[DemandRecord]:
-    """Return all open demand records."""
-    return _MOCK_DEMANDS
+    """Return all open demand records from AI Search.
+
+    Falls back to mock data when Azure AI Search is not configured.
+    """
+    search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
+    if not search_endpoint:
+        logger.warning("AZURE_SEARCH_ENDPOINT not configured, returning mock data")
+        return _MOCK_DEMANDS
+
+    try:
+        search_client = SearchClient(
+            endpoint=search_endpoint,
+            index_name=os.getenv("AZURE_JD_SEARCH_INDEX_NAME", "jd-index"),
+            credential=_get_search_credential(),
+        )
+
+        # Fetch all documents from the JD index
+        results = search_client.search(
+            search_text="*",
+            select=[
+                "demand_id", "customer_name", "essential_skill", "location",
+                "country", "created_on", "start_date", "end_date",
+                "role_description", "work_mode", "band", "open_positions",
+                "job_description", "role_cluster"
+            ],
+            top=1000,  # Limit to 1000 demands
+        )
+
+        demands = []
+        for doc in results:
+            # Convert date strings back to date objects
+            demand_data = dict(doc)
+            for date_field in ["created_on", "start_date", "end_date"]:
+                if date_field in demand_data and isinstance(demand_data[date_field], str):
+                    demand_data[date_field] = date.fromisoformat(demand_data[date_field])
+            demands.append(DemandRecord(**demand_data))
+
+        logger.info("Fetched %d demands from AI Search", len(demands))
+        return demands
+
+    except Exception as e:
+        logger.error("Failed to fetch demands from AI Search: %s", e)
+        # Fall back to mock data on error
+        return _MOCK_DEMANDS
 
 
 @app.post(
@@ -609,8 +671,49 @@ async def get_demand_matches(
 
 @app.get("/supply", response_model=list[SupplyProfile], tags=["supply"])
 async def list_supply(_user: CurrentUser) -> list[SupplyProfile]:
-    """Return available supply profiles (mock data)."""
-    return _MOCK_SUPPLY
+    """Return available supply profiles from AI Search.
+
+    Falls back to mock data when Azure AI Search is not configured.
+    """
+    search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
+    if not search_endpoint:
+        logger.warning("AZURE_SEARCH_ENDPOINT not configured, returning mock data")
+        return _MOCK_SUPPLY
+
+    try:
+        search_client = SearchClient(
+            endpoint=search_endpoint,
+            index_name=os.getenv("AZURE_SEARCH_SUPPLY_INDEX", "supply-profiles"),
+            credential=_get_search_credential(),
+        )
+
+        # Fetch all documents from the supply index
+        results = search_client.search(
+            search_text="*",
+            select=[
+                "employee_id", "employee_name", "band", "availability_from",
+                "ageing_bucket", "work_mode", "location", "experience",
+                "role_name", "country", "skills_iaspire", "certified_skills",
+                "trained_skills", "recent_skills", "language_skills", "role_cluster"
+            ],
+            top=1000,  # Limit to 1000 profiles
+        )
+
+        profiles = []
+        for doc in results:
+            # Convert date strings back to date objects
+            profile_data = dict(doc)
+            if "availability_from" in profile_data and isinstance(profile_data["availability_from"], str):
+                profile_data["availability_from"] = date.fromisoformat(profile_data["availability_from"])
+            profiles.append(SupplyProfile(**profile_data))
+
+        logger.info("Fetched %d supply profiles from AI Search", len(profiles))
+        return profiles
+
+    except Exception as e:
+        logger.error("Failed to fetch supply profiles from AI Search: %s", e)
+        # Fall back to mock data on error
+        return _MOCK_SUPPLY
 
 
 @app.post(
@@ -813,7 +916,7 @@ async def vectorize_supply_profiles(
     search_client = SearchClient(
         endpoint=search_endpoint,
         index_name=os.getenv("AZURE_SEARCH_SUPPLY_INDEX", "supply-profiles"),
-        credential=DefaultAzureCredential(),
+        credential=_get_search_credential(),
     )
 
     results = vectorize_and_index(request.profiles, openai_client, search_client)
