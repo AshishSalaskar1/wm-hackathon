@@ -11,6 +11,12 @@ export default defineConfig({
         target: process.env.VITE_API_URL ?? "http://localhost:8000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
+        bypass(req) {
+          // Don't proxy requests for source files (TypeScript, etc.)
+          if (req.url?.match(/\.(ts|tsx|js|jsx|map)$/)) {
+            return req.url;
+          }
+        },
       },
     },
   },
