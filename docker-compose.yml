@@ -1,0 +1,108 @@
+# docker-compose.yml — Local development emulators for wm-hackathon
+#
+# Usage:
+#   Start all emulators:  docker compose up -d
+#   Stop all emulators:   docker compose down
+#   Wipe persisted data:  docker compose down -v
+#
+# After first start, create the Blob Storage containers (one-time):
+#   docker compose exec azurite sh -c \
+#     "az storage container create --name supply-uploads \
+#      --connection-string \$AZURITE_CONN && \
+#      az storage container create --name demand-uploads \
+#      --connection-string \$AZURITE_CONN"
+# (or use Azure Storage Explorer pointed at http://127.0.0.1:10000)
+#
+# NOTE: Azure AI Search has no official local emulator.
+#       The matching and indexing layers fall back to no-op / mock responses
+#       when AZURE_SEARCH_ENDPOINT is unset. See docs/infra/dev-setup.md.
+#
+# See docs/infra/dev-setup.md for full local development setup instructions.
+
+services:
+
+  # -------------------------------------------------------------------------
+  # Azurite — Azure Blob, Queue, and Table Storage emulator
+  #
+  # Blob endpoint:   http://127.0.0.1:10000/devstoreaccount1
+  # Queue endpoint:  http://127.0.0.1:10001/devstoreaccount1
+  # Table endpoint:  http://127.0.0.1:10002/devstoreaccount1
+  #
+  # Connection string for .env (well-known emulator credential, safe to commit):
+  #   AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=http;\
+  #     AccountName=devstoreaccount1;\
+  #     AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;\
+  #     BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;
+  # -------------------------------------------------------------------------
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: wm-azurite
+    restart: unless-stopped
+    ports:
+      - "10000:10000"   # Blob Service
+      - "10001:10001"   # Queue Service
+      - "10002:10002"   # Table Service
+    volumes:
+      - azurite-data:/data
+    command: >
+      azurite
+      --blobHost 0.0.0.0
+      --queueHost 0.0.0.0
+      --tableHost 0.0.0.0
+      --loose
+    healthcheck:
+      test:
+        - "CMD"
+        - "node"
+        - "-e"
+        - |
+          require('net')
+            .createConnection(10000, '127.0.0.1')
+            .on('connect', () => process.exit(0))
+            .on('error',   () => process.exit(1))
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # -------------------------------------------------------------------------
+  # Cosmos DB emulator — Azure Cosmos DB for NoSQL (Linux version)
+  #
+  # Endpoint:    https://localhost:8081
+  # Account key  (well-known emulator credential, safe to commit):
+  #   AZURE_COSMOS_KEY=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b5nOH4Vz/6tZGyw==
+  #
+  # The emulator uses a self-signed TLS certificate.
+  # Set AZURE_COSMOS_DISABLE_SSL_VERIFY=true in .env for local dev only.
+  # Download the emulator cert for trust (see dev-setup.md for instructions).
+  # -------------------------------------------------------------------------
+  cosmos:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+    container_name: wm-cosmos
+    restart: unless-stopped
+    ports:
+      - "8081:8081"     # Data Explorer + emulator API
+      - "10251:10251"   # Direct mode port
+      - "10252:10252"   # Direct mode port
+      - "10253:10253"   # Direct mode port
+      - "10254:10254"   # Direct mode port
+    environment:
+      AZURE_COSMOS_EMULATOR_PARTITION_COUNT: "10"
+      AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE: "true"
+      AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE: "127.0.0.1"
+    volumes:
+      - cosmos-data:/tmp/cosmos/appdata
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "curl -fsk https://localhost:8081/_explorer/emulator.pem > /dev/null 2>&1"
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+volumes:
+  azurite-data:
+    driver: local
+  cosmos-data:
+    driver: local

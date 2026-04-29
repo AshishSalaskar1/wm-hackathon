@@ -1,0 +1,74 @@
+name: CD — Deploy to Dev
+
+on:
+  push:
+    branches: [main]
+
+# Require Azure credentials to be configured as repository secrets:
+#   AZURE_CLIENT_ID       — Managed identity / service principal client ID
+#   AZURE_TENANT_ID       — Azure AD tenant ID
+#   AZURE_SUBSCRIPTION_ID — Azure subscription ID
+#   AZURE_CONTAINER_REGISTRY — ACR login server (e.g. myregistry.azurecr.io)
+#   AZURE_RESOURCE_GROUP  — Resource group name
+#   API_APP_NAME          — Azure Container App or App Service name for the API
+#   UI_APP_NAME           — Azure Container App or App Service name for the UI
+#
+# These secrets are set after SP0-002 (Azure infrastructure provisioned).
+# The workflow gates on their presence so it is safe to merge before infra is ready.
+
+jobs:
+  build-and-push:
+    name: Build & Push Container Images
+    runs-on: ubuntu-latest
+    # Only run when Azure credentials are configured
+    if: >
+      vars.AZURE_CONTAINER_REGISTRY != ''
+      && secrets.AZURE_CLIENT_ID != ''
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name ${{ vars.AZURE_CONTAINER_REGISTRY }}
+
+      - name: Set image tags
+        id: tags
+        run: |
+          SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+          echo "api=${{ vars.AZURE_CONTAINER_REGISTRY }}/api:${SHA}" >> "$GITHUB_OUTPUT"
+          echo "ui=${{ vars.AZURE_CONTAINER_REGISTRY }}/ui:${SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Build & push API image
+        run: |
+          docker build -t ${{ steps.tags.outputs.api }} \
+            -f infra/docker/api.Dockerfile .
+          docker push ${{ steps.tags.outputs.api }}
+
+      - name: Build & push UI image
+        run: |
+          docker build -t ${{ steps.tags.outputs.ui }} \
+            -f infra/docker/ui.Dockerfile src/ui
+          docker push ${{ steps.tags.outputs.ui }}
+
+      - name: Deploy API to dev
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
+          containerAppName: ${{ vars.API_APP_NAME }}
+          imageToDeploy: ${{ steps.tags.outputs.api }}
+
+      - name: Deploy UI to dev
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
+          containerAppName: ${{ vars.UI_APP_NAME }}
+          imageToDeploy: ${{ steps.tags.outputs.ui }}

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>RMS — Recruitment Management System</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		/* Design tokens */
+		:root{
+			--bg: #f6f7fb;
+			--surface: #ffffff;
+			--muted: #6b7280;
+			--text: #0f1724;
+			--primary: #24348f; /* deep indigo */
+			--primary-600: #1f2f88;
+			--accent-success: #16a34a; /* green */
+			--accent-pending: #f97316; /* orange */
+			--accent-danger: #dc2626; /* red */
+			--card-shadow: 0 6px 18px rgba(16,24,40,0.08);
+			--radius: 10px;
+			--radius-sm: 6px;
+		}
+		/* Wireframe mode (grayscale) */
+		body.wireframe{ filter: grayscale(100%); }
+
+		html,body{ height:100%; margin:0; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); color:var(--text); }
+		.app{ max-width:1400px; margin:24px auto; padding:20px; }
+		header.app-header{ display:flex; align-items:center; gap:16px; justify-content:space-between; margin-bottom:20px; }
+		.brand{ display:flex; gap:12px; align-items:center; }
+		.logo { width:44px; height:44px; background:linear-gradient(180deg,var(--primary),var(--primary-600)); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; border-radius:8px; }
+		.title{ font-weight:700; font-size:1.1rem; }
+		nav.primary{ display:flex; gap:16px; align-items:center; }
+		nav.primary a{ color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:8px; font-weight:600; }
+		nav.primary a.active{ background:rgba(36,52,143,0.06); color:var(--primary); }
+
+		/* Controls */
+		.controls{ display:flex; gap:10px; align-items:center; }
+		.select, .input{ background:var(--surface); border:1px solid #e6e9f2; padding:8px 10px; border-radius:8px; }
+		.btn{ background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; box-shadow: none; font-weight:600; }
+		.btn.ghost{ background:transparent; color:var(--primary); border:1px solid rgba(36,52,143,0.08); }
+		.toggle{ background:transparent; border:1px solid #e6e9f2; padding:6px 8px; border-radius:8px; cursor:pointer; }
+
+		/* Layout */
+		.kpis{ display:flex; gap:16px; margin:18px 0 22px; }
+		.kpi{ background:var(--surface); padding:16px; border-radius:var(--radius); box-shadow:var(--card-shadow); min-width:170px; }
+		.kpi .label{ color:var(--muted); font-size:0.85rem; }
+		.kpi .value{ font-weight:700; font-size:1.6rem; margin-top:6px; }
+
+		.layout{ display:grid; grid-template-columns: 1fr 340px; gap:18px; }
+		.main{ background:transparent; }
+		.panel{ background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--card-shadow); }
+
+		/* Filters / Search */
+		.filters{ display:flex; gap:10px; align-items:center; margin-bottom:14px; }
+		.search{ flex:1; display:flex; gap:8px; }
+		.search input{ flex:1; padding:10px 12px; border-radius:8px; border:1px solid #e6e9f2; }
+
+		/* JD list (cards + table) */
+		.jd-grid{ display:grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+		.jd-card{ padding:14px; border-radius:10px; background:linear-gradient(180deg, #fff, #fbfdff); border:1px solid #eef2ff; box-shadow:0 4px 14px rgba(36,52,143,0.03); transition:transform .14s ease, box-shadow .14s ease; }
+		.jd-card:hover{ transform:translateY(-4px); box-shadow:0 10px 28px rgba(36,52,143,0.06); }
+		.jd-meta{ display:flex; justify-content:space-between; gap:8px; align-items:center; }
+		.jd-title{ font-weight:700; font-size:1rem; }
+		.chip{ display:inline-block; padding:6px 10px; border-radius:999px; font-weight:600; font-size:0.82rem; }
+		.chip.open{ background:#eefcf3; color:var(--accent-success); border:1px solid rgba(22,163,74,0.08); }
+		.chip.hold{ background:#fff7ed; color:var(--accent-pending); }
+		.chip.closed{ background:#fff2f2; color:var(--accent-danger); }
+
+		.jd-footer{ display:flex; justify-content:space-between; margin-top:12px; align-items:center; }
+		.actions{ display:flex; gap:8px; }
+		.actions button[disabled]{ opacity:0.45; cursor:not-allowed; }
+
+		/* Activity feed */
+		.activity-feed{ display:flex; flex-direction:column; gap:8px; max-height:540px; overflow:auto; }
+		.feed-item{ padding:10px; border-radius:8px; background:linear-gradient(180deg,#fff,#fbfdff); border:1px solid #eef2ff; font-size:0.95rem; }
+
+		/* Split view for JD detail */
+		.split{ display:grid; grid-template-columns: 460px 1fr; gap:16px; }
+		.candidate-card{ display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfdff); border:1px solid #eef2ff; transition:transform .12s ease; }
+		.candidate-card:hover{ transform:translateY(-4px); }
+		.avatar{ width:56px;height:56px;border-radius:12px;background:#eef2ff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700; }
+		.match{ width:100%; height:10px; background:#f3f6ff; border-radius:8px; overflow:hidden; }
+		.match > span{ display:block; height:100%; background:linear-gradient(90deg,var(--primary),#4f46e5); }
+		.status-b{ padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.78rem; }
+		.status-applied{ background:#eef2ff; color:var(--primary); }
+		.status-shortlisted{ background:#eefcf3; color:var(--accent-success); }
+		.status-interview{ background:#fff7ed; color:var(--accent-pending); }
+		.status-rejected{ background:#fff2f2; color:var(--accent-danger); }
+
+		/* Modals */
+		.modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,0.45); display:flex; align-items:center; justify-content:center; z-index:80; }
+		.modal-inner{ background:var(--surface); padding:18px; border-radius:12px; width:min(980px,96vw); box-shadow:0 14px 40px rgba(2,6,23,0.3); }
+
+		/* Small helpers */
+		.muted{ color:var(--muted); }
+		.small{ font-size:0.85rem; }
+		.hidden{ display:none; }
+
+		@media (max-width:1000px){ .layout{ grid-template-columns: 1fr; } .split{ grid-template-columns: 1fr; } }
+	</style>
+</head>
+<body>
+	<div class="app" id="app">
+		<header class="app-header">
+			<div class="brand">
+				<div class="logo">R</div>
+				<div>
+					<div class="title">Recruitment Management System</div>
+					<div class="small muted">Enterprise HR • Data-driven hiring</div>
+				</div>
+			</div>
+			<nav class="primary">
+				<a href="#" id="nav-dashboard" class="active">Dashboard</a>
+				<a href="#jds" id="nav-jds">Job Descriptions</a>
+				<a href="#candidates" id="nav-candidates">Candidates</a>
+			</nav>
+			<div class="controls">
+				<select id="role-select" class="select" title="Choose role">
+					<option value="HM">Hiring Manager (HM)</option>
+					<option value="PM">Project Manager (PM)</option>
+				</select>
+				<button id="mode-toggle" class="toggle">Wireframe</button>
+			</div>
+		</header>
+
+		<!-- KPIs -->
+		<section class="kpis">
+			<div class="kpi"><div class="label">Total Open JDs</div><div class="value" id="kpi-open">12</div></div>
+			<div class="kpi"><div class="label">Total Candidates</div><div class="value" id="kpi-candidates">87</div></div>
+			<div class="kpi"><div class="label">Candidates in Review</div><div class="value" id="kpi-review">23</div></div>
+			<div class="kpi"><div class="label">Shortlisted / Rejected</div><div class="value" id="kpi-sr">8 / 5</div></div>
+		</section>
+
+		<div class="layout">
+			<main class="main">
+				<div class="panel">
+					<div class="filters">
+						<div class="search">
+							<input id="global-search" placeholder="Search JDs and resumes (press Enter)..." />
+							<button class="btn ghost" id="search-btn">Search</button>
+						</div>
+						<select id="filter-dept" class="select"><option value="all">Department: All</option><option>IT</option><option>Analytics</option></select>
+						<select id="filter-role" class="select"><option value="all">Role: All</option><option>Frontend</option><option>Data</option></select>
+						<select id="filter-exp" class="select"><option>Experience</option><option>0-2</option><option>2-4</option></select>
+						<select id="filter-status" class="select"><option>All status</option><option>Open</option><option>On Hold</option><option>Closed</option></select>
+					</div>
+
+					<!-- JD Grid / List -->
+					<div id="jd-list" class="jd-grid" style="margin-top:12px">
+						<!-- Example JD cards injected by JS for interactivity -->
+					</div>
+
+					<!-- Candidates panel (hidden by default) -->
+					<div id="candidates-panel" class="panel hidden" style="margin-top:12px">
+						<h3>All Candidates</h3>
+						<div id="candidates-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px"></div>
+					</div>
+				</div>
+
+				<!-- JD detail + ranked list (hidden by default, opens when a JD is clicked) -->
+				<div id="jd-detail-screen" class="panel hidden" style="margin-top:16px">
+					<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+						<div>
+							<div id="jd-title" style="font-weight:800;font-size:1.1rem">Frontend Engineer</div>
+							<div class="muted small" id="jd-meta">IT • 3-5 yrs • 14 applicants • <span id="jd-last">2026-04-27</span></div>
+						</div>
+						<div class="actions">
+							<button id="open-edit" class="btn">Edit JD</button>
+							<button id="open-ranking" class="btn ghost">Open Ranking View</button>
+							<button id="back-to-list" class="btn ghost">Back</button>
+						</div>
+					</div>
+					<div class="split">
+						<section id="jd-left">
+							<h4>Job Description</h4>
+							<div id="jd-desc" class="muted small">Loading description...</div>
+							<div style="margin-top:12px"><strong>Skills:</strong> <span id="jd-skills">React, JS, CSS</span></div>
+							<div style="margin-top:18px"><strong>Version:</strong> <span id="jd-version">v1.2</span></div>
+						</section>
+						<aside id="jd-right">
+							<h4>Top Ranked Candidates</h4>
+							<div id="ranked-list" style="margin-top:8px; display:flex; flex-direction:column; gap:10px; max-height:420px; overflow:auto"></div>
+							<div style="margin-top:12px; display:flex; gap:8px; align-items:center">
+								<button id="view-next" class="btn ghost">View Next 10 Candidates</button>
+								<div class="muted small">Smooth client-side transition</div>
+							</div>
+						</aside>
+					</div>
+				</div>
+			</main>
+
+			<aside class="panel">
+				<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+					<div style="font-weight:700">Activity Feed</div>
+					<div class="small muted">Real-time</div>
+				</div>
+				<div id="activity" class="activity-feed">
+					<!-- feed items injected by JS -->
+				</div>
+			</aside>
+		</div>
+
+		<!-- Candidate modal, compare, associations -->
+		<div id="modal-root"></div>
+	</div>
+
+	<script>
+		// Basic dataset (sample) — in a real app this comes from APIs / websockets
+		const JD_DATA = [
+			{ id:1, title:'Frontend Engineer', dept:'IT', exp:'3-5 yrs', applicants:14, status:'Open', last:'2026-04-27', skills:['React','JS','CSS'], desc:'Build and maintain UI components with best practices.', assignedTo: null },
+			{ id:2, title:'Data Analyst', dept:'Analytics', exp:'2-4 yrs', applicants:9, status:'On Hold', last:'2026-04-25', skills:['SQL','Python'], desc:'Analyze data and build dashboards.', assignedTo: 'PM_1' },
+			{ id:3, title:'Backend Engineer', dept:'IT', exp:'4-7 yrs', applicants:20, status:'Open', last:'2026-04-26', skills:['Node','DB'], desc:'API development and scaling.', assignedTo: null }
+		];
+
+		const CANDIDATES = [
+			{ id:'c1', name:'Asha Patel', score:92, skills:['React','JS','CSS'], exp:'4 yrs', status:'Shortlisted', associations:[1,2], breakdown:{skills:55,experience:25,location:7,history:5} },
+			{ id:'c2', name:'Mia Chen', score:81, skills:['JS','Vue'], exp:'3 yrs', status:'Applied', associations:[1], breakdown:{skills:50,experience:20,location:6,history:5} },
+			{ id:'c3', name:'Ravi Kumar', score:74, skills:['SQL','Python'], exp:'3 yrs', status:'Interviewed', associations:[2], breakdown:{skills:45,experience:18,location:6,history:5} },
+			{ id:'c4', name:'Lina Gomez', score:68, skills:['Node','DB'], exp:'5 yrs', status:'Rejected', associations:[3], breakdown:{skills:40,experience:18,location:5,history:5} }
+		];
+
+		// similarity threshold (PRD requires >=70%)
+		const SIMILARITY_THRESHOLD = 70;
+
+		// Role handling: HM sees everything, PM sees only assigned JDs
+		let role = 'HM'; // default
+		document.getElementById('role-select').addEventListener('change', (e)=>{ role = e.target.value; renderJDs(); applyPermissions(); });
+
+		// Wireframe / hi-fi toggle
+		const modeBtn = document.getElementById('mode-toggle');
+		let wire = false;
+		modeBtn.addEventListener('click', ()=>{ wire = !wire; document.body.classList.toggle('wireframe', wire); modeBtn.textContent = wire ? 'Hi‑Fi' : 'Wireframe'; });
+
+		// Render JD cards (applies search & filters client-side)
+		function renderJDs(){
+			const container = document.getElementById('jd-list'); container.innerHTML='';
+			const q = (document.getElementById('global-search').value||'').toLowerCase().trim();
+			const deptF = document.getElementById('filter-dept').value;
+			const roleF = document.getElementById('filter-role').value;
+			const statusF = document.getElementById('filter-status').value;
+
+			const visible = JD_DATA.filter(jd => {
+				if(role==='PM' && !jd.assignedTo) return false; // PM only sees assigned
+				if(deptF!=='all' && deptF!=='Department: All' && jd.dept !== deptF) return false;
+				if(roleF!=='all' && roleF!=='Role: All' && !jd.title.toLowerCase().includes(roleF.toLowerCase())) return false;
+				if(statusF && statusF!=='All status' && statusF!==''){
+					if(statusF==='Open' && jd.status!=='Open') return false;
+					if(statusF==='On Hold' && jd.status!=='On Hold') return false;
+					if(statusF==='Closed' && jd.status!=='Closed') return false;
+				}
+				if(q){ const hay = (jd.title+' '+jd.desc+' '+jd.skills.join(' ')).toLowerCase(); if(!hay.includes(q)) return false; }
+				return true;
+			});
+
+			visible.forEach(jd=>{
+				const el = document.createElement('div'); el.className='jd-card';
+				el.innerHTML = `
+					<div class="jd-meta">
+						<div>
+							<div class="jd-title">${jd.title}</div>
+							<div class="muted small">${jd.dept} • ${jd.exp} • ${jd.applicants} applicants</div>
+						</div>
+						<div>
+							<div class="chip ${jd.status==='Open'?'open': jd.status==='On Hold'?'hold':'closed'}">${jd.status}</div>
+						</div>
+					</div>
+					<div class="jd-footer">
+						<div class="muted small">Updated ${jd.last}</div>
+						<div class="actions">
+							<button class="btn ghost" data-action="view" data-id="${jd.id}">View</button>
+							<button class="btn" data-action="edit" data-id="${jd.id}">Edit</button>
+							<button class="btn ghost" data-action="rank" data-id="${jd.id}">Ranking</button>
+						</div>
+					</div>
+				`;
+				container.appendChild(el);
+			});
+
+			// attach actions
+			container.querySelectorAll('button[data-action]').forEach(btn=> btn.addEventListener('click', onJDAction));
+			applyPermissions();
+		}
+
+		function applyPermissions(){
+			// PM cannot edit unless assigned
+			document.querySelectorAll('button[data-action="edit"]').forEach(b=>{
+				const id = parseInt(b.dataset.id,10);
+				const jd = JD_DATA.find(x=>x.id===id);
+				if(role==='PM' && !jd.assignedTo){ b.disabled = true; } else b.disabled = false;
+			});
+			// show role visually
+			document.querySelector('.controls .select option:checked')?.parentElement;
+		}
+
+		function onJDAction(e){
+			const id = parseInt(e.target.dataset.id,10);
+			const action = e.target.dataset.action;
+			const jd = JD_DATA.find(x=>x.id===id);
+			if(action==='view' || action==='rank') openJDDetail(jd);
+			if(action==='edit'){ if(role==='PM' && !jd.assignedTo){ alert('Permission denied: PM cannot edit this JD'); return; } openEditModal(jd); }
+		}
+
+		// Open JD detail
+		function openJDDetail(jd){
+			document.getElementById('jd-detail-screen').classList.remove('hidden');
+			document.getElementById('jd-title').textContent = jd.title;
+			document.getElementById('jd-meta').textContent = `${jd.dept} • ${jd.exp} • ${jd.applicants} applicants • Updated ${jd.last}`;
+			document.getElementById('jd-desc').textContent = jd.desc;
+			// load top 5 candidates for that JD (simulate by filtering associations)
+			const list = document.getElementById('ranked-list'); list.innerHTML='';
+			const ranked = CANDIDATES.filter(c=> c.associations.includes(jd.id)).sort((a,b)=>b.score-a.score).slice(0,5);
+			ranked.forEach(c=> list.appendChild(renderCandidateCard(c)));
+		}
+
+		// render a candidate card; showCheckbox toggles multi-select for compare view
+		function renderCandidateCard(c, showCheckbox=false){
+			// enforce PRD similarity threshold when rendering in ranked lists
+			if(c.score < SIMILARITY_THRESHOLD) return null;
+			const el = document.createElement('div'); el.className='candidate-card';
+			el.innerHTML = `
+				<div class="avatar">${c.name.split(' ').map(x=>x[0]).slice(0,2).join('')}</div>
+				<div style="flex:1">
+					<div style="display:flex;justify-content:space-between;align-items:center">
+						<div><strong>${c.name}</strong> <span class="status-b ${'status-'+c.status.toLowerCase()}">${c.status}</span></div>
+						<div class="muted small">${c.exp}</div>
+					</div>
+					<div class="small muted">${c.skills.join(' • ')}</div>
+					<div style="margin-top:8px" class="match"><span style="width:${c.score}%"></span></div>
+					<div class="small muted" style="margin-top:8px">${c.associations.length>1? '<a href="#" class="associations-link" data-id="'+c.id+'">Also recommended for other JDs</a>':''}</div>
+				</div>
+				<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+					${showCheckbox? '<input type="checkbox" class="candidate-select" data-id="'+c.id+'" title="Select to compare">' : ''}
+					<button class="btn ghost" onclick="openCandidate('${c.id}')">Preview</button>
+					<button class="btn" onclick="bookmark('${c.id}')">Bookmark</button>
+				</div>
+			`;
+			return el;
+		}
+
+		// Candidate preview modal
+		function openCandidate(id){
+			const cand = CANDIDATES.find(c=>c.id===id);
+			const modal = document.createElement('div'); modal.className='modal-backdrop';
+			modal.innerHTML = `<div class='modal-inner'>
+				<div style="display:flex;justify-content:space-between;align-items:center"><h3>${cand.name}</h3><button class='btn ghost' id='close-c'>Close</button></div>
+				<div style='display:flex;gap:16px;margin-top:12px'>
+					<div style='min-width:140px'><div class='avatar' style='width:96px;height:96px;font-size:28px'>${cand.name.split(' ').map(x=>x[0]).slice(0,2).join('')}</div></div>
+					<div>
+						<div><strong>Match:</strong> ${cand.score}%</div>
+						<div><strong>Experience:</strong> ${cand.exp}</div>
+						<div><strong>Skills:</strong> ${cand.skills.join(', ')}</div>
+						<div style='margin-top:10px'><strong>Associations:</strong> ${cand.associations.map(id=> JD_DATA.find(j=>j.id===id).title).join(' • ')}</div>
+						<div style='margin-top:10px'><strong>Score breakdown:</strong></div>
+						<div style='display:flex;gap:8px;margin-top:6px'>
+							<div class='small muted'>Skills</div>
+							<div style='flex:1;background:#f3f6ff;border-radius:8px;overflow:hidden'><div style='width:${cand.breakdown.skills}%;height:10px;background:linear-gradient(90deg,var(--primary),#4f46e5)'></div></div>
+							<div class='small'>${cand.breakdown.skills}%</div>
+						</div>
+						<div style='display:flex;gap:8px;margin-top:6px'>
+							<div class='small muted'>Experience</div>
+							<div style='flex:1;background:#f3f6ff;border-radius:8px;overflow:hidden'><div style='width:${cand.breakdown.experience}%;height:10px;background:linear-gradient(90deg,#10b981,#16a34a)'></div></div>
+							<div class='small'>${cand.breakdown.experience}%</div>
+						</div>
+						<div style='margin-top:12px'><button class='btn' onclick="selectForCompare('${cand.id}')">Select for Compare</button> <button class='btn ghost' onclick="bookmark('${cand.id}')">Bookmark</button></div>
+					</div>
+				</div>
+			</div>`;
+			document.getElementById('modal-root').appendChild(modal);
+			modal.querySelector('#close-c').addEventListener('click', ()=> modal.remove());
+			// association link handlers inside modal
+			modal.querySelectorAll('.associations-link').forEach(a=> a.addEventListener('click', (ev)=>{ ev.preventDefault(); openAssociations(cand.id); }));
+		}
+
+		function compare(id){ alert('Open compare modal with selected candidates (prototype) — candidate: '+id); }
+		function bookmark(id){ alert('Bookmarked '+id); }
+
+		// select candidate for multi-compare (stores selection in local UI state)
+		function selectForCompare(id){
+			const existing = document.querySelector(`.candidate-select[data-id="${id}"]`);
+			if(existing){ existing.checked = true; }
+			alert('Selected '+id+' for compare. Open Compare modal when ready.');
+		}
+
+		// open associations modal for a candidate (shows all JDs where resume appears)
+		function openAssociations(candidateId){
+			const cand = CANDIDATES.find(c=>c.id===candidateId);
+			const modal = document.createElement('div'); modal.className='modal-backdrop';
+			modal.innerHTML = `<div class='modal-inner'><div style="display:flex;justify-content:space-between;align-items:center"><h3>Associations for ${cand.name}</h3><button class='btn ghost' id='close-assoc'>Close</button></div>
+				<div style='margin-top:12px'>
+					${cand.associations.map(id=>{ const j = JD_DATA.find(x=>x.id===id); return `<div style="padding:8px;border-radius:8px;border:1px solid #eef2ff;margin-bottom:8px"><strong>${j.title}</strong><div class='muted small'>${j.dept} • ${j.exp}</div><div style='margin-top:8px'><button class="btn ghost" onclick="openJDFromModal(${j.id})">Open JD</button></div></div>`; }).join('')}
+				</div></div>`;
+			document.getElementById('modal-root').appendChild(modal);
+			modal.querySelector('#close-assoc').addEventListener('click', ()=> modal.remove());
+		}
+
+		function openJDFromModal(id){ document.getElementById('modal-root').innerHTML=''; openJDDetail(JD_DATA.find(j=>j.id===id)); }
+
+		function openEditModal(jd){ alert('Open Edit JD modal for '+jd.title+' (prototype)'); }
+
+		// Real-time feed simulation
+		const ACTIVITY = [
+			(c, j) => `Candidate <strong>${c}</strong> shortlisted for JD <strong>${j}</strong>`,
+			(c, j) => `Resume <strong>${c}</strong> also recommended for JD <strong>${j}</strong>`,
+			(c, j) => `JD <strong>${j}</strong> updated by Hiring Manager`
+		];
+		function pushFeed(text){ const f = document.getElementById('activity'); const item = document.createElement('div'); item.className='feed-item'; item.innerHTML=text; f.prepend(item); if(f.children.length>50) f.removeChild(f.lastChild); }
+
+		// periodic simulated updates
+		setInterval(()=>{
+			const cand = CANDIDATES[Math.floor(Math.random()*CANDIDATES.length)];
+			const jd = JD_DATA[Math.floor(Math.random()*JD_DATA.length)];
+			const template = ACTIVITY[Math.floor(Math.random()*ACTIVITY.length)];
+			pushFeed(template(cand.name, jd.title));
+			// sometimes change a candidate's status to animate real-time
+			if(Math.random()>0.8){ cand.status = ['Applied','Shortlisted','Interviewed','Offered','Rejected'][Math.floor(Math.random()*5)]; renderJDs(); renderCandidates(); }
+		}, 3400);
+
+		// search shortcut
+		document.getElementById('search-btn').addEventListener('click', ()=> alert('Global search prototype — query: '+document.getElementById('global-search').value));
+		document.getElementById('back-to-list').addEventListener('click', ()=> document.getElementById('jd-detail-screen').classList.add('hidden'));
+		document.getElementById('view-next').addEventListener('click', ()=> alert('Load next 10 candidates (client-side pagination prototype)'));
+
+		// initial render
+		renderJDs();
+
+		// Make JD card clickable (open detail when clicking outside buttons)
+		// and basic navigation between Dashboard / JDs / Candidates
+		document.getElementById('nav-jds').addEventListener('click', (e)=>{ e.preventDefault(); showView('jds'); });
+		document.getElementById('nav-dashboard').addEventListener('click', (e)=>{ e.preventDefault(); showView('dashboard'); });
+		document.getElementById('nav-candidates').addEventListener('click', (e)=>{ e.preventDefault(); showView('candidates'); renderCandidates(); });
+
+		// show/hide view helper
+		function showView(v){
+			// hide jd detail when switching
+			const jdDetail = document.getElementById('jd-detail-screen');
+			const jdList = document.getElementById('jd-list');
+			const candPanel = document.getElementById('candidates-panel');
+			if(v==='dashboard' || v==='jds'){
+				jdDetail.classList.add('hidden');
+				jdList.parentElement.classList.remove('hidden');
+				candPanel.classList.add('hidden');
+			}
+			if(v==='candidates'){
+				jdDetail.classList.add('hidden');
+				jdList.parentElement.classList.add('hidden');
+				candPanel.classList.remove('hidden');
+			}
+			// highlight nav
+			document.querySelectorAll('nav.primary a').forEach(a=> a.classList.remove('active'));
+			if(v==='dashboard') document.getElementById('nav-dashboard').classList.add('active');
+			if(v==='jds') document.getElementById('nav-jds').classList.add('active');
+			if(v==='candidates') document.getElementById('nav-candidates').classList.add('active');
+		}
+
+		// render candidates list for Candidates view
+		function renderCandidates(){
+			const container = document.getElementById('candidates-list'); container.innerHTML='';
+			// PM should only see candidates for their assigned JDs
+			const visibleCandidates = CANDIDATES.filter(c => {
+				if(role==='PM'){
+					// candidate is visible if any association is an assigned JD
+					return c.associations.some(jid => JD_DATA.find(j=>j.id===jid && j.assignedTo));
+				}
+				return true;
+			});
+			visibleCandidates.forEach(c=>{
+				const card = document.createElement('div'); card.className='candidate-card';
+				card.innerHTML = `
+					<div class="avatar">${c.name.split(' ').map(x=>x[0]).slice(0,2).join('')}</div>
+					<div style="flex:1">
+						<div style="display:flex;justify-content:space-between;align-items:center">
+							<div><strong>${c.name}</strong> <span class="status-b ${'status-'+c.status.toLowerCase()}">${c.status}</span></div>
+							<div class="muted small">${c.exp}</div>
+						</div>
+						<div class="small muted">${c.skills.join(' • ')}</div>
+					</div>
+					<div style="display:flex;flex-direction:column;gap:8px">
+						<button class="btn ghost" type="button">Preview</button>
+						<button class="btn" type="button">Bookmark</button>
+					</div>
+				`;
+				// preview click
+				card.querySelector('.btn.ghost').addEventListener('click', ()=> openCandidate(c.id));
+				container.appendChild(card);
+			});
+		}
+
+		// make JD cards open on entire card click (but not when clicking the action buttons)
+		const jdListRootObserver = new MutationObserver(()=>{
+			document.querySelectorAll('#jd-list .jd-card').forEach(card=>{
+				if(!card.dataset.clickable){
+					card.dataset.clickable = '1';
+					card.addEventListener('click', (ev)=>{
+						if(ev.target.closest('button')) return; // allow buttons to handle their own actions
+						const id = card.querySelector('button[data-id]')?.dataset.id;
+						if(id) openJDDetail(JD_DATA.find(j=>j.id==id));
+					});
+				}
+			});
+		});
+		jdListRootObserver.observe(document.getElementById('jd-list'), { childList:true, subtree:true });
+
+		// small accessibility: keyboard Enter on search
+		document.getElementById('global-search').addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('search-btn').click(); });
+
+		// demo: set PM assigned JD filter (simulate a PM assigned to Data Analyst)
+		// If role is PM, they will only see JD with assignedTo !== null
+		document.getElementById('role-select').value = 'HM';
+	</script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+openapi: "3.1.0"
+
+info:
+  title: Intelligent Demand-Supply Matching API
+  version: "0.1.0"
+  description: >
+    Matches open talent demands against available supply profiles using Azure AI Search.
+    Sprint 0 skeleton — all endpoints return mock JSON payloads.
+    Authentication bypass mode is enabled in dev (AUTH_BYPASS_DEV=true).
+    Full Azure AD validation is wired in SP4-005.
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: ops
+    description: Operational endpoints
+  - name: demands
+    description: Demand record management and match retrieval
+  - name: supply
+    description: Supply profile access
+  - name: events
+    description: Event ingestion endpoints for supply profile and JD change events
+
+paths:
+  /health:
+    get:
+      tags: [ops]
+      summary: Health check
+      operationId: health
+      security: []
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  version:
+                    type: string
+                    example: "0.1.0"
+
+  /demands:
+    get:
+      tags: [demands]
+      summary: List open demand records
+      operationId: listDemands
+      responses:
+        "200":
+          description: List of open demand records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DemandRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+    post:
+      tags: [demands]
+      summary: Submit a new demand record
+      operationId: createDemand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DemandRecord"
+      responses:
+        "201":
+          description: Demand record accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemandRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: Validation error
+
+  /demands/{demand_id}/matches:
+    get:
+      tags: [demands]
+      summary: Get ranked match results for a demand
+      operationId: getDemandMatches
+      parameters:
+        - name: demand_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Demand identifier (SR_ID)
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: >
+            Page number for iterative retrieval (SP3-006). Page 1 returns
+            candidates at or above the 70% similarity threshold. Page 2+
+            returns below-threshold candidates flagged with below_threshold=true.
+      responses:
+        "200":
+          description: Ranked match results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchResultsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: Demand not found
+
+  /supply:
+    get:
+      tags: [supply]
+      summary: List available supply profiles
+      operationId: listSupply
+      responses:
+        "200":
+          description: List of supply profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SupplyProfile"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /events/profile:
+    post:
+      tags: [events]
+      summary: Accept a supply profile change event
+      operationId: receiveProfileEvent
+      description: >
+        Accepts profile add, update, or delete events from Azure Event Grid.
+        Logs the event and returns 202 Accepted. Real indexing logic is wired
+        in SP1-004, SP1-005, and SP1-006.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileEventPayload"
+      responses:
+        "202":
+          description: Event accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventAck"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: Validation error
+
+  /events/jd:
+    post:
+      tags: [events]
+      summary: Accept a JD (demand) change event
+      operationId: receiveJDEvent
+      description: >
+        Accepts JD add, modify, or delete events from Azure Event Grid.
+        Logs the event and returns 202 Accepted. Real matching pipeline wiring
+        is implemented in SP2-007, SP3-001, and SP3-002.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JDEventPayload"
+      responses:
+        "202":
+          description: Event accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventAck"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: Validation error
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        Azure AD bearer token. In dev, set AUTH_BYPASS_DEV=true (default) to skip
+        validation. Full validation wired in SP4-005.
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid authorization token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                example: Missing authorization header
+
+  schemas:
+    DemandRecord:
+      type: object
+      required:
+        - demand_id
+        - customer_name
+        - essential_skill
+        - location
+        - country
+        - created_on
+        - start_date
+        - end_date
+        - role_description
+        - work_mode
+        - band
+        - open_positions
+        - job_description
+        - role_cluster
+      properties:
+        demand_id:
+          type: integer
+          description: Unique Service Request identifier (SR_ID)
+          example: 1
+        customer_name:
+          type: string
+          description: Business unit / customer name
+          example: Customer2
+        essential_skill:
+          type: string
+          description: Primary required skill
+          example: .NET
+        location:
+          type: string
+          description: City where resource is required (UPPER case)
+          example: HYDERABAD
+        country:
+          type: string
+          description: Country where resource is required
+          example: INDIA
+        created_on:
+          type: string
+          format: date
+          description: Date the service request was raised
+          example: "2026-04-17"
+        start_date:
+          type: string
+          format: date
+          description: Date by which resource is needed
+          example: "2026-04-30"
+        end_date:
+          type: string
+          format: date
+          description: Expected end date of engagement
+          example: "2026-05-25"
+        role_description:
+          type: string
+          description: Short role label
+          example: Developer L3
+        work_mode:
+          type: string
+          enum: [ONSITE, OFFSHORE]
+          description: Work mode
+          example: OFFSHORE
+        band:
+          type: string
+          description: Required experience band
+          example: GROUP B2
+        open_positions:
+          type: integer
+          minimum: 1
+          description: Number of open headcount positions
+          example: 1
+        job_description:
+          type: string
+          description: Full free-text job description (primary semantic embedding source)
+        role_cluster:
+          type: string
+          description: Wipro role cluster name
+          example: DEVELOPER L3
+
+    SupplyProfile:
+      type: object
+      required:
+        - employee_id
+        - employee_name
+        - band
+        - availability_from
+        - ageing_bucket
+        - work_mode
+        - location
+        - experience
+        - country
+      properties:
+        employee_id:
+          type: string
+          description: Anonymized employee identifier
+          example: EMP-00001
+        employee_name:
+          type: string
+          description: Anonymized display name
+          example: Employee1
+        band:
+          type: string
+          description: Experience band
+          example: GROUP B2
+        availability_from:
+          type: string
+          format: date
+          description: Date employee became available
+          example: "2026-01-02"
+        ageing_bucket:
+          type: string
+          enum: ["0-30 DAYS", "31-60 DAYS", "61-90 DAYS", "91-180 DAYS", ">180 DAYS"]
+          description: Availability ageing bucket
+          example: 31-60 DAYS
+        work_mode:
+          type: string
+          enum: [ONSITE, OFFSHORE]
+          description: Work mode
+          example: OFFSHORE
+        location:
+          type: string
+          description: City of posting (UPPER case)
+          example: HYDERABAD
+        experience:
+          type: string
+          description: Total experience string
+          example: 8Years 3Months
+        role_name:
+          type: string
+          nullable: true
+          description: Designation / role (nullable — 36 null records in source)
+          example: Senior .NET Developer
+        country:
+          type: string
+          description: Country of posting
+          example: INDIA
+        skills_iaspire:
+          type: string
+          nullable: true
+          description: >
+            Skills from iAspire with proficiency levels L1–L5 (primary matching signal).
+            Nullable — 503 null records in source.
+          example: ".NET(L4), C#(L4), Azure(L3)"
+        certified_skills:
+          type: string
+          nullable: true
+          description: Certified skills (nullable — ~20.9% null in source)
+          example: Microsoft Certified: Azure Developer Associate(L3)
+        trained_skills:
+          type: string
+          nullable: true
+          description: Trained skills (nullable — ~11.8% null in source)
+        recent_skills:
+          type: string
+          nullable: true
+          description: Recently used skills (nullable — ~77% null in source)
+        language_skills:
+          type: string
+          nullable: true
+          description: Language skills (nullable — ~71.5% null in source)
+          example: "English, Telugu"
+        role_cluster:
+          type: string
+          nullable: true
+          description: Role cluster (nullable — ~17.3% null in source)
+          example: DEVELOPER L3
+
+    MatchResult:
+      type: object
+      required:
+        - rank
+        - employee_id
+        - employee_name
+        - similarity_score
+        - band
+        - location
+        - experience
+        - work_mode
+        - below_threshold
+      properties:
+        rank:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Match rank (1 = best fit)
+          example: 1
+        employee_id:
+          type: string
+          description: Anonymized employee identifier
+          example: EMP-00001
+        employee_name:
+          type: string
+          description: Anonymized display name
+          example: Employee1
+        similarity_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Similarity score 0–100
+          example: 92
+        band:
+          type: string
+          description: Experience band
+          example: GROUP B2
+        location:
+          type: string
+          description: City of posting
+          example: HYDERABAD
+        experience:
+          type: string
+          description: Total experience string
+          example: 8Years 3Months
+        role_name:
+          type: string
+          nullable: true
+          description: Designation / role
+        skills_iaspire:
+          type: string
+          nullable: true
+          description: Primary skills
+        certified_skills:
+          type: string
+          nullable: true
+          description: Certified skills
+        role_cluster:
+          type: string
+          nullable: true
+          description: Role cluster
+        work_mode:
+          type: string
+          enum: [ONSITE, OFFSHORE]
+          description: Work mode
+        below_threshold:
+          type: boolean
+          description: True when score is below the 70% threshold (pagination pages 2+)
+          example: false
+
+    MatchResultsResponse:
+      type: object
+      required:
+        - demand_id
+        - status
+        - page
+        - results
+      properties:
+        demand_id:
+          type: integer
+          description: Demand identifier
+          example: 1
+        status:
+          type: string
+          enum: [READY, MATCHING_IN_PROGRESS, NO_RESULTS]
+          description: Matching pipeline status
+          example: READY
+        page:
+          type: integer
+          minimum: 1
+          description: Current page number (1-indexed)
+          example: 1
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchResult"
+          description: Ranked match results for this page
+
+    ProfileEventPayload:
+      type: object
+      required:
+        - event_type
+        - employee_id
+      properties:
+        event_type:
+          type: string
+          enum: [profile.added, profile.updated, profile.deleted]
+          description: Type of supply profile change event
+          example: profile.added
+        employee_id:
+          type: string
+          description: Anonymized employee identifier
+          example: EMP-00001
+        blob_url:
+          type: string
+          nullable: true
+          description: Blob Storage URL of the updated file (null for delete events)
+          example: "https://sa.blob.core.windows.net/supply-uploads/EMP-00001.xlsx"
+        correlation_id:
+          type: string
+          nullable: true
+          description: Optional correlation ID for distributed tracing
+
+    JDEventPayload:
+      type: object
+      required:
+        - event_type
+        - demand_id
+      properties:
+        event_type:
+          type: string
+          enum: [jd.added, jd.modified, jd.deleted]
+          description: Type of JD change event
+          example: jd.added
+        demand_id:
+          type: integer
+          description: Demand identifier (SR_ID)
+          example: 1
+        blob_url:
+          type: string
+          nullable: true
+          description: Blob Storage URL of the updated file (null for delete events)
+          example: "https://sa.blob.core.windows.net/demand-uploads/demand-1.xlsx"
+        correlation_id:
+          type: string
+          nullable: true
+          description: Optional correlation ID for distributed tracing
+
+    EventAck:
+      type: object
+      required:
+        - accepted
+        - event_type
+        - message
+      properties:
+        accepted:
+          type: boolean
+          description: Always true for 202 responses
+          example: true
+        event_type:
+          type: string
+          description: Echoed event type from the payload
+          example: profile.added
+        message:
+          type: string
+          description: Human-readable status message
+          example: "Profile event 'profile.added' for 'EMP-00001' accepted."

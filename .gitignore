@@ -1,1 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+
+# Environment variables — never commit real credentials
+.env
+*.env.local
+*.env.*.local
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Frontend
+src/ui/node_modules/
+src/ui/dist/
+src/ui/.vite/
+
+# Azure credentials and keys
+*.pem
+*.key
+*.pfx
+*.p12
+serviceAccountKey.json
+azure-credentials.json
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter notebooks output (keep notebooks, discard output)
+*.ipynb checkpoints/
+
 .copilot-tracking/

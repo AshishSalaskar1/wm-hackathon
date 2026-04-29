@@ -1,0 +1,240 @@
+/* Design tokens — kept in sync with rms-wireframe.html */
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --muted: #6b7280;
+  --text: #0f1724;
+  --primary: #24348f;
+  --primary-600: #1f2f88;
+  --accent-success: #16a34a;
+  --accent-pending: #f97316;
+  --accent-danger: #dc2626;
+  --card-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+  --radius: 10px;
+  --radius-sm: 6px;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── Typography ──────────────────────────────────────────── */
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+/* ── Utility classes ─────────────────────────────────────── */
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.btn:hover {
+  opacity: 0.88;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid rgba(36, 52, 143, 0.2);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Form controls ───────────────────────────────────────── */
+.input,
+.select {
+  background: var(--surface);
+  border: 1px solid #e6e9f2;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.input:focus,
+.select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+/* ── Status chips ────────────────────────────────────────── */
+.chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.chip-open {
+  background: #eefcf3;
+  color: var(--accent-success);
+  border: 1px solid rgba(22, 163, 74, 0.1);
+}
+
+.chip-hold {
+  background: #fff7ed;
+  color: var(--accent-pending);
+  border: 1px solid rgba(249, 115, 22, 0.1);
+}
+
+.chip-closed {
+  background: #fff2f2;
+  color: var(--accent-danger);
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+/* ── Score bar ───────────────────────────────────────────── */
+.score-bar-track {
+  width: 100%;
+  height: 8px;
+  background: #f3f6ff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #4f46e5);
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+/* ── Score badge ─────────────────────────────────────────── */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: #eef2ff;
+  color: var(--primary);
+}
+
+.score-badge.high {
+  background: #eefcf3;
+  color: var(--accent-success);
+}
+
+.score-badge.below {
+  background: #fff7ed;
+  color: var(--accent-pending);
+}
+
+/* ── Candidate status badges ─────────────────────────────── */
+.status-b {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+.status-applied {
+  background: #eef2ff;
+  color: var(--primary);
+}
+
+.status-shortlisted {
+  background: #eefcf3;
+  color: var(--accent-success);
+}
+
+.status-interview {
+  background: #fff7ed;
+  color: var(--accent-pending);
+}
+
+.status-rejected {
+  background: #fff2f2;
+  color: var(--accent-danger);
+}
+
+/* ── App shell ───────────────────────────────────────────── */
+.app-shell {
+  max-width: 1400px;
+  margin: 24px auto;
+  padding: 0 20px 40px;
+}
+
+/* ── Panel card ──────────────────────────────────────────── */
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--card-shadow);
+}
+
+/* ── Page layout (main + aside) ──────────────────────────── */
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+@media (max-width: 1000px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Loading / empty states ──────────────────────────────── */
+.state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 12px;
+  color: var(--muted);
+  text-align: center;
+}
