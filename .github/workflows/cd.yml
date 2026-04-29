@@ -56,7 +56,7 @@ jobs:
       - name: Build & push UI image
         run: |
           docker build -t ${{ steps.tags.outputs.ui }} \
-            -f infra/docker/ui.Dockerfile src/ui
+            -f infra/docker/ui.Dockerfile .
           docker push ${{ steps.tags.outputs.ui }}
 
       - name: Deploy API to dev

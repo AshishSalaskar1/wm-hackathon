@@ -25,9 +25,10 @@ htmlcov/
 .ruff_cache/
 
 # Node / Frontend
-src/ui/node_modules/
-src/ui/dist/
-src/ui/.vite/
+node_modules/
+dist/
+.vite/
+package-lock.json
 
 # Azure credentials and keys
 *.pem

@@ -174,9 +174,7 @@ pip install -e ".[dev]"
 ### 6. Install frontend dependencies
 
 ```bash
-cd src/ui
 npm install
-cd ../..
 ```
 
 ### 7. Run the backend API
@@ -190,10 +188,9 @@ OpenAPI (Swagger UI) docs are at <http://localhost:8000/docs>.
 
 ### 8. Run the frontend
 
-Open a second terminal (with the virtual environment activated):
+Open a second terminal:
 
 ```bash
-cd src/ui
 npm run dev
 ```
 

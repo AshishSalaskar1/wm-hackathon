@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext .ts,.tsx --max-warnings 0"
+    "lint": "eslint src/ui --ext .ts,.tsx --max-warnings 0"
   },
   "dependencies": {
     "react": "^18.3.0",

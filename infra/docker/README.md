@@ -20,9 +20,10 @@ CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```dockerfile
 FROM node:20-alpine AS build
 WORKDIR /app
-COPY package*.json .
+COPY package*.json ./
 RUN npm ci
-COPY . .
+COPY tsconfig.json vite.config.ts ./
+COPY src/ui/ src/ui/
 RUN npm run build
 
 FROM nginx:alpine

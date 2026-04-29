@@ -76,9 +76,7 @@ uv sync
 ### 3. Install frontend dependencies
 
 ```bash
-cd src/ui
 npm install
-cd ../..
 ```
 
 ### 4. Run the backend API (dev mode)
@@ -111,7 +109,6 @@ To disable the bypass and require a real token, set `AUTH_BYPASS_DEV=false` in y
 ### 5. Run the frontend (dev mode)
 
 ```bash
-cd src/ui
 npm run dev
 ```
 
