@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getDemands } from "../api/client";
 import type { DemandRecord } from "../types/api";
-import ActivityFeed from "../components/ActivityFeed";
 import DemandCard from "../components/DemandCard";
 import KpiCards from "../components/KpiCards";
 
@@ -185,7 +184,6 @@ export default function DemandsPage() {
           </div>
         </main>
 
-        <ActivityFeed />
       </div>
     </div>
   );
