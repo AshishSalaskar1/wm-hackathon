@@ -182,7 +182,7 @@ cd ../..
 ### 7. Run the backend API
 
 ```bash
-uvicorn src.api.main:app --reload --port 8000
+uvicorn src.backend.api.main:app --reload --port 8000
 ```
 
 The API is available at <http://localhost:8000>.
@@ -210,7 +210,7 @@ python -m pytest tests/unit -v
 Expected result: all tests pass.
 
 ```bash
-python -m ruff check src tests
+python -m ruff check src/backend tests
 ```
 
 Expected result: no linting errors.

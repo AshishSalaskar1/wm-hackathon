@@ -12,12 +12,13 @@ Intelligent Demand-Supply Matching — Wipro Hackathon. Matches open talent dema
 
 ```text
 src/
-  ingestion/          # Supply & Demand Excel parsers (SP1-001, SP1-002)
-  indexing/           # Event handlers for profile and JD events (SP1-004 → SP1-006, SP2-007)
-  matching/           # Vectorization + retrieval engine (SP2-001 → SP2-008)
-  api/                # Backend REST API — FastAPI (SP0-005)
-  ui/                 # Phase 1 frontend — React + TypeScript (SP0-006, SP3-004, SP3-005)
-  evaluation/         # Evaluation framework — precision, recall, MRR (SP4-001)
+  backend/
+    ingestion/          # Supply & Demand Excel parsers (SP1-001, SP1-002)
+    indexing/           # Event handlers for profile and JD events (SP1-004 → SP1-006, SP2-007)
+    matching/           # Vectorization + retrieval engine (SP2-001 → SP2-008)
+    api/                # Backend REST API — FastAPI (SP0-005)
+    evaluation/         # Evaluation framework — precision, recall, MRR (SP4-001)
+  ui/                   # Phase 1 frontend — React + TypeScript (SP0-006, SP3-004, SP3-005)
 tests/
   unit/               # Fast, isolated unit tests
   integration/        # End-to-end tests requiring Azure services
@@ -97,7 +98,7 @@ cd ../..
 ### 4. Run the backend API (dev mode)
 
 ```bash
-uvicorn src.api.main:app --reload --port 8000
+uvicorn src.backend.api.main:app --reload --port 8000
 ```
 
 API is available at <http://localhost:8000>.
@@ -140,10 +141,10 @@ python -m pytest tests/unit -v
 python -m pytest tests/unit/test_api_stubs.py -v
 
 # Linting (requires ruff)
-python -m ruff check src tests
+python -m ruff check src/backend tests
 
 # Type check (requires mypy)
-python -m mypy src
+python -m mypy src/backend
 ```
 
 > **Windows note:** if `pytest` is not on your `PATH`, use `python -m pytest` as shown above.

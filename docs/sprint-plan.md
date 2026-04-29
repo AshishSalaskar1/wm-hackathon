@@ -793,12 +793,12 @@ As Anshuman, I want a repeatable evaluation framework that measures matching pre
 
 **Acceptance Criteria:**
 
-* Evaluation framework implemented as a standalone script in `src/evaluation/`.
+* Evaluation framework implemented as a standalone script in `src/backend/evaluation/`.
 * Accepts as input: a set of demand records and corresponding ground truth supply profiles (expert-reviewed or synthetic labelled set).
 * Computes and outputs: precision@10, recall@10, Mean Reciprocal Rank (MRR), and throughput (demand records matched per second).
 * If no labelled ground truth is available, the framework generates a Talent Lead review template (CSV) listing the top-10 results per demand for manual scoring — addressing OQ-04.
 * Output written to `docs/evaluation/evaluation-report.md` with a summary table.
-* Framework runnable with a single command: `python src/evaluation/run_evaluation.py --strategy dense`.
+* Framework runnable with a single command: `python src/backend/evaluation/run_evaluation.py --strategy dense`.
 
 **Dependencies:** SP2-007, SP2-008.
 
