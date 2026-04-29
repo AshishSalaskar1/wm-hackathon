@@ -1,0 +1,356 @@
+GROUP_CUSTOMER_NAME,SR_ID,ESSENTIAL_SKILL,DERIVED_SR_CITY,SR_CREATED_ON,DEM_ST_DATE,DEM_END_DATE,ROLE_DESCRIPTION,ONS/OFF,DERIVED_SR_COUNTRY,SR_BAND,OPEN_POS,JD,SR_ROLE_CLUSTER_NAME
+Customer2,1,.NET,HYDERABAD,17 April 2026,30-04-2026,25-05-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"overall experience and 4 years on MSPP / low-code technologies
+Experience in Model driven and canvas apps, Sharepoint, Integrations, Dataverse and complex solutions is needed
+Strong communications and stakeholder management skills are required
+Work Result: MSPP development
+Skill Area: Application Development
+Technology: .NET C#
+Proficiency - Technology: Expert
+Secondary Skill Area: Application Development
+Secondary Technology: .NET C#
+Proficiency - Secondary Technology: Advanced
+Other Skills: MS Power Automate and Power Apps
+GenAI or other AI tools experience within Power Platform will be nice to have",DEVELOPER L3
+Customer4,2,Core Java,MUMBAI,17 April 2026,22-05-2026,17-06-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"Task Description: DevSecOps engineer.
+Key Responsibilities
+CI/CD Pipeline Management:Design, implement, and maintain automated pipelines to accelerate development and software delivery.
+Collaboration and Automation:Work with development and support teams to automate repetitive tasks and resolve production bottlenecks.
+Containerization & Security:Manage containers (e.g.,Docker, Kubernetes/Openshift) and enforce security best practices.
+Monitoring and Reliability:Implement monitoring solutions to ensure system uptime, performance, and stability.
+Required Skills
+Technical Skills:
+Deep knowledge of CI/CD principles,Proficiency with Linux/Unix scripting (Bash, Python), CI/CD tools (Jenkins, GitHub Actions), and container orchestration (Kubernetes,Openshift)
+Knowledge of java, Spring boot
+Tools:Experience with Git, Artifactory, SonarQube, monitoring tools (Splunk, Dynatrace).
+- Strong proficiency in Java,
+- Expertise in Spring / Spring Boot frameworks.
+- Deep understanding of REST APIs, microservices, and distributed systems.
+- Experience with JPA/Hibernate and relational databases (Oracle, PostgreSQL, MySQL).
+- Experience with message brokers (Kafka, RabbitMQ).
+- Familiarity with CI/CD, Git, and DevOps practices.
+- Understanding of Docker, Kubernetes, and cloud platforms.
+Work Result: task delivered
+Skill Are",DEVELOPER L3
+Customer5,3,DevOps,HYDERABAD,13 April 2026,30-04-2026,23-05-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"Task Description: Technical Competencies:
+? Experience in structured error analysis, specifically in supporting development teams when infrastructure?related issues occur
+? Knowledge in interface integration and connecting technical systems
+? Hands?on experience with GitHub Actions pipeline development (Infrastructure as Code)
+? Good understanding of network technologies
+? Python skills for scripting and automation
+? Experience with container technologies (Docker / Podman)
+? Working knowledge of Linux system administration (services, logs, monitoring, troubleshooting)
+? Confident use of Linux Shell / Bash for scripting and automation tasks
+Work Result: Git, Confluence, etc.
+Skill Area: Other
+Technology: Other
+Proficiency - Technology: Expert
+Other Skills: Methodological & Social Skills:
+? Strong communication skills, including the ability to explain technical issues clearly
+? Understandable and effective English communication, required for collaboration with international teams
+? Structured, self?driven, and solution?oriented working style",DEVELOPER L3
+Customer7,4,DevOps,CHENNAI,17 April 2026,22-05-2026,13-06-2026,DevOps Engineer L3,OFFSHORE,INDIA,GROUP B2,1,"? 5+ years in DevOps/SRE/Platform Support/Production Engineering (not only ?CI user? experience).
+? Proven track record handling production-grade support with SLAs and incident processes.
+Core technical skills
+? Strong Linux troubleshooting (processes, file permissions, system logs).
+? Networking basics: DNS, TLS/certs, proxies, firewalls, connectivity debugging.
+? Solid understanding of CI/CD concepts and failure modes.
+? Comfortable reading configs/logs and forming hypotheses quickly.
+Tooling and ways of working
+? Strong discipline in Jira (or similar) and Confluence documentation.
+? Clear written communication: status updates that help stakeholders, not confuse them.
+Working style
+? You can work independently, but you?re not a ?lone wolf?: you escalate early when needed.
+? You keep work visible and you close loops.
+Strong advantages (Nice-to-have, helps you stand out)
+? GitHub org administration and policy controls
+? GitHub Actions runner fleet operations (self-hosted runners, scaling, permissions, caching)
+? Artifactory admin basics (storage cleanup patterns, repo permissions, replication)
+? SonarQube troubleshooting and integration knowledge
+? Jenkins/CloudBees admin experience (agents, pipelines, plugins, upgrades)
+? UCD deployment tool familiarity
+? Security tooling exposure (SAST, secrets scanning, access controls)
+? Any automation scripting (Bash/Python) and Git fundamentals
+? Observability basics (metrics/logs/traces; alerting hygiene)",DEVOPS ENGINEER CONTAINERIZATION - L3
+Customer10,5,Fullstack Java Enterprise,CYBERJAYA,17 March 2026,15-05-2026,02-06-2026,Technical Lead L1,ONSITE,MALAYSIA,GROUP B3,1,"Task Description: Java and Full stack development
+Years of experience: 8 Years
+?Must have? skillset: Java, Angular, SpringBoot, Cloud Kubernetes, Python, DB (Postgres, Oracle & MongoDB), CI/CD
+?Nice-to-have? skillset: Airflow, Spark, ReactJS, TDD
+Preferred location: 1 CBJ, 1 IND
+Work Result: Software releases
+Skill Area: Application Development
+Technology: Java
+Proficiency - Technology: Expert
+Secondary Skill Area: Application Development
+Secondary Technology: Python
+Proficiency - Secondary Technology: Advanced
+Other Skills: CI/CD pipeline development, TDD, OpenShift, Containerization, Phyton, Spark, Airflow, Product operation (1/2/3LS)",TECHNICAL LEAD MAINFRAME MODERNIZATION - L1
+Customer12,6,Fullstack Java Enterprise,CHENNAI,15 April 2026,01-05-2026,20-05-2026,Developer L4,OFFSHORE,INDIA,GROUP B3,1,"Task Description: Role Overview
+We are looking for an experienced Senior Software Developer to join our small, high-impact development team. The ideal candidate is a hands-on engineer with strong technical foundations, proven delivery experience, and a sense of true software ownership.
+You will work closely with business experts, product owners, and fellow developers in an agile environment to design, build, test, and maintain end to end software solutions. Because our team is compact (5 developers), each member plays a critical role in architecture, implementation, quality assurance, and long-term product evolution.
+Key Responsibilities (for more details refer to attachment)
+(1) Software Design & Development
+(2) Quality & Testing Ownership
+(3) Agile Teamwork & Collaboration
+(4) Ownership & Accountability
+What We Value
+? Engineers who own the software they build?not just write code.
+? People who ask questions, challenge assumptions, and propose improvements
+? A strong engineering culture based on quality, transparency, and business focus.
+? Team players who thrive in close collaboration with a small but skilled group.
+Work Result: documented source code, and test cases; executable product increments according to the assigned user stories, following the DoD
+Skill Area: Application Development
+Technology: Java",DEVELOPER L4
+Customer13,7,Fullstack Java Enterprise,PRAGUE,17 April 2026,29-05-2026,23-06-2026,Developer L3,ONSITE,CZECH REPUBLIC,GROUP B2,1,"Task Description: Looking for the senior Senior Software Engineer with Expert knowledge of the domain of Internal Development Platform, DevSecOps Platforms, hands-on Software Development experience.
+Software delivery of newly developed IDP application.
+Proven track of records of Architecture projects and Software development.
+Technologies: Java, OpenAPI v3, SQL, JSON, CodeNow, K8S (GKE, AKS), Apigee GW, GitHub, Artifactory, GitHub Actions, Argo CD, Grafana, Prometheus, Loki.
+Methodology: Agile/Kanban
+Work Result: Software delivered according to the plan
+Skill Area: Application Development
+Technology: Java
+Proficiency - Technology: Expert
+Secondary Skill Area: Other
+Secondary Technology: Other
+Proficiency - Secondary Technology: Expert
+Other Skills: CodeNow, K8S (GKE, AKS), Apigee GW, GitHub, Artifactory, GitHub Actions, Argo CD, Grafana, Prometheus, Loki.",DEVELOPER L3
+Customer14,8,Fullstack Java Enterprise,CHENNAI,17 April 2026,22-05-2026,08-06-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"Task Description: Key Responsibilities:
+Å Design, develop, and maintain scalable backend services using Java & Spring Boot.
+Å Build rich, modular, responsive web applications using Angular & TypeScript.
+Å Work with SQL/NoSQL databases, optimize queries, and manage data integration.
+Preferred Qualifications:
+Å Experience in Agile teams with exposure to leadership or mentorship.
+Å Working knowledge of asynchronous messaging (Kafka, RabbitMQ).
+Å Hands-on experience with Elasticsearch, Kibana, Grafana, ELK stack.
+Å Performance tuning skills across API, database, and front-end layers.
+Å Experience using modern engineering AI tools (e.g., GitHub Copilot, code assistants).
+Å Exposure to agentic AI concepts (LLM-based automation, n8n, RAG frameworks) is a plus.
+Å Strong communication and collaboration skills.
+Å Develop and consume RESTful APIs and work with event/messaging systems.
+Å Contribute to CI/CD pipelines, containerized deployments, and cloud environments.
+Å Participate in Agile ceremonies, architecture discussions, and technical planning.
+Å Mentor junior developers and help uplift coding practices and code quality in the team.
+Å Leverage AI-assisted development tools to improve productivity and technical outcomes.
+Å Take ownership of complex technical areas without handholding
+Work Result: Strong commitment",DEVELOPER L3
+Customer15,9,Fullstack Java Enterprise,CHENNAI,17 April 2026,29-05-2026,25-06-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"ask Description: Task Description: Support for Spectrum project as part of North Star initiative. DevOps resource needed to support the Spectrum platform.
+Technologies: Java
+nice-to-have: J2EE
+Work Result: Full EU shift coverage for Spectrum (on-call will be part of the engagement)
+Skill Area: Infrastructure
+Technology: Infrastructure Monitoring
+Proficiency - Technology: Advanced
+Other Skills: Fluent English (written and spoken) required
+Experience with Java technologies for large enterprise web applications (Java, JavaScript, Java Servlet, etc.) preferred
+Experience with LUW (Linux, UNIX, Windows) and SQL Server preferred
+Deliver assigned services according to agreed SLA?s (TRT, Availability, and Performance)
+Maintain service production and pre-production environments and systems
+Ensure adherence to testing and installation procedures and resolve deviations
+Interact with members of the IT community and business to address both run and build/project topics
+Good understanding of IT infrastructure (HW, network, OS, DB, middleware)
+Very good communication skills
+Very good analytical skills and structured approach
+Organizational skills, experience with matrix management
+Ability to work independently, self-motivation, and self-confidence
+Strong customer focus
+Work Result: Full EU timezone coverage for Spectrum
+Sk",DEVELOPER L3
+Customer19,10,Project Management,CHENNAI,20 April 2026,05-05-2026,01-06-2026,PMO Analyst L3,OFFSHORE,INDIA,GROUP B2,1,"Task Description: Tasks
+- Analysis of complex IT scenarios and identification of optimization potential
+- Support IT product owners to design technical solution approaches
+- Creation of user stories and alignment with IT product owners
+- Independent organization of meetings with internal and external stakeholders
+- Independent creation of presentations, decision memos and meeting minutes
+- Coordinative support of projects / Project Management Office
+Skills & Qualifications
+- Professional experience and university degree or equivalent in information technology or related field
+- Very good spoken and written English
+- Experience in process optimization and the moderation of working groups in an international context
+- Positive attitude towards work in complex environments with uncertainty
+- Excellent organizational talent to manage multiple activities in parallel
+- Team player with very high level of commitment and responsibility
+- Independent working style and personal engagement, as well as very structured thinking
+Work Result: Produce high?quality technical insights, solution proposals, and documentation while ensuring consistent alignment with Product Owners and stakeholders, contributing to the effective coordination and advancement of designated IT projects.
+Skill Area: Other
+Technology: Other
+Proficien",PMO Analyst L3
+Customer4,11,Python Application Programming,PRAGUE,13 April 2026,15-05-2026,12-06-2026,Developer L3,ONSITE,CZECH REPUBLIC,GROUP B2,1,"Task Description: Who do we look for?
+We are seeking a skilled and motivated Full Stack Developer to join our team. The ideal candidate will have a solid foundation in web development technologies, specifically JavaScript, Python, and MySQL.
+Here?s what you?ll be doing:
+? Design, develop and maintain web applications using Javascript, Python and MySQL
+? Collaborate with cross-functional teams to design and implement new features
+? Write clean, efficient, and well-documented code
+? Troubleshoot and debug application issues
+? Ensure the best possible performance, quality and responsiveness of the applications
+? Identify and correct bottlenecks and fix bugs
+? Help maintain code quality and organization
+Here?s what we?re looking for:
+? Solid knowledge and experience in Javascript, Python and MySQL
+? Familiarity with front-end technologies such as HTML, CSS, and React.JS
+? Experience with back-end frameworks such as Fast API
+? Understanding of database management and optimization
+? Strong understanding of web development concepts and best practices
+? Familiarity with Git version control
+? Good problem-solving and analytical skills
+? Ability to work independently and in a team environment
+Work Result: Meraki Automation Application
+Skill Area: Application Development
+Technology: Python
+Proficiency - Technology: A",DEVELOPER L3
+Customer21,12,Python Application Programming,CHENNAI,17 April 2026,16-05-2026,14-06-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"Who do we look for?
+We are seeking a skilled and motivated Full Stack Developer to join our team. The ideal candidate will have a solid foundation in web development technologies, specifically JavaScript, Python, and MySQL.
+Here?s what you?ll be doing:
+? Design, develop and maintain web applications using Javascript, Python and MySQL
+? Collaborate with cross-functional teams to design and implement new features
+? Write clean, efficient, and well-documented code
+? Troubleshoot and debug application issues
+? Ensure the best possible performance, quality and responsiveness of the applications
+? Identify and correct bottlenecks and fix bugs
+? Help maintain code quality and organization
+Here?s what we?re looking for:
+? Solid knowledge and experience in Javascript, Python and MySQL
+? Familiarity with front-end technologies such as HTML, CSS, and React.JS
+? Experience with back-end frameworks such as Fast API
+? Understanding of database management and optimization
+? Strong understanding of web development concepts and best practices
+? Familiarity with Git version control
+? Good problem-solving and analytical skills
+? Ability to work independently and in a team environment
+If you are a motivated developer who is eager to take on new challenges and contribute to impactful projects, we would love to hear from you!",DEVELOPER L3
+Customer22,13,Salesforce Administration,BENGALURU,16 April 2026,29-04-2026,27-05-2026,Developer L4,OFFSHORE,INDIA,GROUP B3,1,"Task Description: Need strong LWC, Apex and integration skills in Sales Cloud.
+Work Result: Salesforce Developer
+Skill Area: COTS
+Technology: Salesforce
+Proficiency - Technology: Advanced
+Other Skills: ? Developing Apex (classes and triggers) and Lightning Components to support business requirements,
+? Application development, including Lightning pages, Visualforce ,Lightning Web Components , Flow automations , asynchronous apex and Salesforce APIs.
+? Technical Solution Designs applying best practices.
+? Integrating third-party platforms and troubleshooting technical issues.
+? Proficient understanding of Salesforce administration, Salesforce lightning framework and Sales cloud .
+? Strong understanding of Salesforce architecture, data model, and security controls.",DEVELOPER L4
+Customer23,14,SAP BRIM,PRAGUE,16 April 2026,29-04-2026,20-05-2026,Functional Consultant L1,ONSITE,CZECH REPUBLIC,GROUP B3,2,"Task Description: Requirements:
+1. Deep knowledge of SAP BRIM - Converging Invoicing.
+2. Having strong Functional and Technical Skills specifically on Converging Charging and Mediation.
+3. Ability to work independently and autonomously, high advisory competency
+4. Strong Configuration and Understanding on complete on SAP BRIM Process
+5. Have basic understanding on ABAP Development
+6. Understanding Workflow Process
+7. Understanding Complex Integration Process
+8. Debugging Skill
+9. Pricing Configuration
+10. Good analytical skills are mandatory.
+11. Very good English skills in word and writing.
+12. Knowledge of SAP UI5 & Fiori are added advantages.
+13. Propose Solution Design and work closely with other ABAP Developers or Functional to complete the solution.
+Work Result: SAP BRIM Functional Consultation and Supports mainly on Convergent Charging
+Skill Area: COTS
+Technology: SAP S/4 Hana
+Proficiency - Technology: Expert
+Secondary Skill Area: COTS
+Secondary Technology: SAP ERP
+Proficiency - Secondary Technology: Advanced",Functional Consultant SAP Source To Pay Ariba - L1
+Customer24,15,SAP BRIM,BENGALURU,16 April 2026,29-04-2026,24-05-2026,Functional Consultant L1,OFFSHORE,INDIA,GROUP B3,2,"Task Description: Requirements:
+1. Deep knowledge of SAP BRIM - Converging Charging, Converging Invoicing and Converging Mediation.
+2. Having strong Functional and Technical Skills specifically on Converging Charging and Mediation.
+3. Ability to work independently and autonomously, high advisory competency
+4. Strong Configuration and Understanding on complete on SAP BRIM Process
+5. Have basic understanding on ABAP Development
+6. Understanding Workflow Process
+7. Understanding Complex Integration Process
+8. Debugging Skill
+9. Pricing Configuration
+10. Good analytical skills are mandatory.
+11. Very good English skills in word and writing.
+12. Knowledge of SAP UI5 & Fiori are added advantages.
+13. Propose Solution Design and work closely with other ABAP Developers or Functional to complete the solution.
+Work Result: SAP BRIM Functional Consultation and Supports mainly on Convergent Charging
+Skill Area: COTS
+Technology: SAP S/4 Hana
+Proficiency - Technology: Expert
+Secondary Skill Area: COTS
+Secondary Technology: SAP ERP
+Proficiency - Secondary Technology: Advanced",Functional Consultant SAP Source To Pay Ariba - L1
+Customer16,16,SAP BRIM,CHENNAI,21 April 2026,04-05-2026,29-05-2026,Developer L3,OFFSHORE,INDIA,GROUP B2,1,"Task Description: Requirements:
+? Deep knowledge of SAP BRIM
+? Having strong Functional and Technical Skills specifically on Converging Mediation in BRIM environment
+? Mandatory to have at least 3 years hands on experience in Converging Mediation (CM)
+? Ability to work independently and autonomously, high advisory competency
+? Have basic understanding on ABAP Development
+? Understanding Workflow Process
+? Understanding Complex Integration Process
+? Debugging Skill
+? Good analytical skills are mandatory
+? Very good English skills in word and writing
+? Knowledge of SAP UI5 & Fiori are added advantages
+? Propose Solution Design and work closely with other ABAP Developers or Functional to complete the solution
+Work Result: SAP BRIM Functional Consultation and Supports mainly on Convergent Mediation
+Skill Area: COTS
+Technology: SAP S/4 Hana
+Proficiency - Technology: Expert
+Secondary Skill Area: COTS
+Secondary Technology: SAP ERP
+Proficiency - Secondary Technology: Advanced",DEVELOPER L3
+Customer17,17,SAP Financial Accounting & Controlling,CHENNAI,16 April 2026,29-04-2026,29-05-2026,Application Architect L1,OFFSHORE,INDIA,GROUP C1,1,"Task Description: SAP FICO/FSCM Consultant with 7-10 years of SAP Support experience for an AMS/(24x7) Support project which requires working in rotations shifts.
+Should be having work experience in the areas of SAP FI-AR, AP, EBP, Asset management, FSCM-Dispute, Collection & Credit management.
+Experienced in Implementation & Support projects.
+Perform detailed analysis of complex business process requirements and provide appropriate system solutions.
+Should have working experience on interfaces.
+Collaborate with cross-functional teams to understand business requirements and provide appropriate SAP solutions.
+Collaborate with Technical teams in providing & testing solutions on programs & Interfaces
+Experience in working with GSN, Jira, and Confluence.
+Excellent communication skills with the ability to explain complex concepts to non-technical users.
+Work Result: SAP FICO, SAP FSCM, Knowledge of ABAP
+Skill Area: COTS
+Technology: SAP S/4 Hana
+Proficiency - Technology: Expert
+Secondary Skill Area: Application Development
+Other Skills: Experience working with GSN, Jira & Confluence
+JD is as below:
+Proven experience as an SAP FICO/FSCM Consultant having around 10 years of experience with a strong focus on support activities in SAP S/4HANA Environment.
+Should have prior experience working in both Implementat",APPLICATION ARCHITECT L1
+Customer27,18,SAP Testing,BENGALURU,16 April 2026,29-04-2026,29-05-2026,Test Engineer L4,OFFSHORE,INDIA,GROUP B3,1,"Task Description: SAP Functional test engineer for GRIP.
+Create and execute FUT, SIT, E2E, Regression across SOM, CM, CC, CI, FI-CA
+Work Result: test cases
+Skill Area: Other
+Technology: Other
+Proficiency - Technology: Advanced
+Other Skills: Functional Testing, Create and execute FUT, SIT, E2E, Regression across SOM, CM, CC, CI, FI-CA",TEST ENGINEER L4
+Customer28,19,SDET,PRAGUE,17 April 2026,03-05-2026,30-05-2026,Test Engineer L3,ONSITE,CZECH REPUBLIC,GROUP B2,1,"Task Description: Senior Quality Assurance Engineer with complex knowledge of the Software Development domain and strong focus on test automation.
+Test automation of newly developed application. Setup of test automation practices, design and development of automated test frameworks, test execution, test results analysis and reporting. Project will cover API testing, contract testing (OpenAPI-based), unit testing support, regression testing, functional testing, PST, bug reporting. Manual testing might be necessary as well. Close collaboration with development teams, ability to understand application code (Java) and contribute to overall software quality and test strategy.Proven knowledge of Test Automation and Test Management. Senior mindset with ability to work independently and proactively improve quality processes.
+Work Result: Automated (daily, health check) tests are implemented.
+Skill Area: Application Development
+Technology: Java
+Proficiency - Technology: Expert
+Secondary Skill Area: Application Development
+Secondary Technology: Testing
+Proficiency - Secondary Technology: Expert
+Other Skills: Test automation frameworks: Karate (preferred), JUnit / TestNG
+API testing tools: Bruno, Postman, SoapUI, Apidog
+OpenAPI v3, REST APIs
+SQL, JSON
+Git, version control workflows
+CI/CD pipelines (e.g. GitHub Acti",Test Automation Engineer Java Selenium - L3
+Customer30,20,Test Automation,PRAGUE,17 April 2026,22-05-2026,19-06-2026,Test Engineer L3,ONSITE,CZECH REPUBLIC,GROUP B2,1,"Task Description: Subsystem testing, regression testing, integration testing, testing automation.
+His responsibility is testing of all implemented stories and performing regression test of the release for this backend product, reporting properly all defects found, he will be an owner of TEST environment where his testing is performed, work with other cross-functional teams to ensure delivery throughout the entire software development lifecycle
+Expected is user level knowledge of linux, SQL, HTML, testing tools JMeter, Postman/Bruno for API testing, selenium for testing automation, team works with JIRA and confluence, qTest, analytical and critical thinking, customer focus (delivery quality and relationship)
+Work Result: Testing report, testing tracked in JIRA
+Skill Area: Application Development
+Technology: Testing
+Proficiency - Technology: Advanced
+Other Skills: team player, quick learner, used to work in international environment, well organized and motivated.",Test Automation Engineer Java Selenium - L3
+Customer31,21,WebMethods,HYDERABAD,13 April 2026,22-05-2026,10-06-2026,Technical Lead L1,OFFSHORE,INDIA,GROUP B3,1,"Task Description: Years of experience: 10+
+? Provide Consultancy, Level 2 and Level 3 support for Finance applications and DevOps pipelines.
+? Ensure secure, stable, and compliant operation of Finance systems
+? Troubleshoot incidents involving Finance workflow, integrations, or data flows
+? Execute deployments, automation, and CI/CD improvements for Finance platforms.
+? Collaborate with Finance product owners, developers and infrastructure teams.
+? Support security controls, vulnerability remediation and compliance standards.
+? Manage changes and enhancements to Finance environments across data centers and cloud.
+Preferred location: India / CBJ
+Work Result: New request for Financial Framework
+Skill Area: Integration & Middleware
+Technology: SAG webMethods
+Proficiency - Technology: Advanced
+Secondary Skill Area: Data Management & Analytics
+Secondary Technology: Oracle DB
+Proficiency - Secondary Technology: Advanced
+Other Skills: Dynatrace, Splunk, SharePlex, EDIFACT invoice message",TECHNICAL LEAD MAINFRAME MODERNIZATION - L1

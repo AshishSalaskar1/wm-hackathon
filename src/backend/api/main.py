@@ -82,7 +82,7 @@ CurrentUser = Annotated[str, Depends(_verify_token)]
 
 
 class DemandRecord(BaseModel):
-    """Open talent demand (maps to the Demand OIR Data Excel sheet)."""
+    """Open talent demand (maps to the Demand OIR CSV)."""
 
     demand_id: int = Field(..., description="Unique Service Request identifier (SR_ID)")
     customer_name: str = Field(..., description="Business unit / customer name")
@@ -248,48 +248,88 @@ _MOCK_DEMANDS: list[DemandRecord] = [
         band="GROUP B2",
         open_positions=1,
         job_description=(
-            "Looking for a Developer L3 with 4+ years of .NET experience on MSPP projects. "
-            "Responsibilities include design, development, and delivery of enterprise .NET applications."
+            "overall experience and 4 years on MSPP / low-code technologies\n"
+            "Experience in Model driven and canvas apps, Sharepoint, Integrations, "
+            "Dataverse and complex solutions is needed\n"
+            "Strong communications and stakeholder management skills are required\n"
+            "Work Result: MSPP development\n"
+            "Skill Area: Application Development\n"
+            "Technology: .NET C#\n"
+            "Proficiency - Technology: Expert\n"
+            "Secondary Skill Area: Application Development\n"
+            "Secondary Technology: .NET C#\n"
+            "Proficiency - Secondary Technology: Advanced\n"
+            "Other Skills: MS Power Automate and Power Apps\n"
+            "GenAI or other AI tools experience within Power Platform will be nice to have"
         ),
         role_cluster="DEVELOPER L3",
     ),
     DemandRecord(
         demand_id=2,
-        customer_name="Customer5",
-        essential_skill="Python",
-        location="BANGALORE",
+        customer_name="Customer4",
+        essential_skill="Core Java",
+        location="MUMBAI",
         country="INDIA",
-        created_on=date(2026, 4, 18),
-        start_date=date(2026, 5, 1),
-        end_date=date(2026, 6, 30),
-        role_description="Data Engineer L2",
+        created_on=date(2026, 4, 17),
+        start_date=date(2026, 5, 22),
+        end_date=date(2026, 6, 17),
+        role_description="Developer L3",
         work_mode="OFFSHORE",
-        band="GROUP C1",
-        open_positions=2,
+        band="GROUP B2",
+        open_positions=1,
         job_description=(
-            "Seeking a Data Engineer L2 proficient in Python, Azure Data Factory, and SQL. "
-            "Experience with Spark, Databricks, and cloud-native data pipelines preferred."
+            "Task Description: DevSecOps engineer.\n"
+            "Key Responsibilities\n"
+            "CI/CD Pipeline Management:Design, implement, and maintain automated pipelines "
+            "to accelerate development and software delivery.\n"
+            "Collaboration and Automation:Work with development and support teams to automate "
+            "repetitive tasks and resolve production bottlenecks.\n"
+            "Containerization & Security:Manage containers (e.g.,Docker, Kubernetes/Openshift) "
+            "and enforce security best practices.\n"
+            "Monitoring and Reliability:Implement monitoring solutions to ensure system uptime, "
+            "performance, and stability.\n"
+            "Required Skills\n"
+            "Technical Skills:\n"
+            "Deep knowledge of CI/CD principles,Proficiency with Linux/Unix scripting "
+            "(Bash, Python), CI/CD tools (Jenkins, GitHub Actions), and container orchestration "
+            "(Kubernetes,Openshift)\n"
+            "Knowledge of java, Spring boot\n"
+            "Tools:Experience with Git, Artifactory, SonarQube, monitoring tools (Splunk, Dynatrace)."
         ),
-        role_cluster="DATA ENGINEER L2",
+        role_cluster="DEVELOPER L3",
     ),
     DemandRecord(
         demand_id=3,
-        customer_name="Customer1",
-        essential_skill="Java",
-        location="PUNE",
+        customer_name="Customer5",
+        essential_skill="DevOps",
+        location="HYDERABAD",
         country="INDIA",
-        created_on=date(2026, 4, 20),
-        start_date=date(2026, 5, 5),
-        end_date=date(2026, 7, 4),
-        role_description="Project Manager L2",
-        work_mode="ONSITE",
-        band="GROUP B1",
+        created_on=date(2026, 4, 13),
+        start_date=date(2026, 4, 30),
+        end_date=date(2026, 5, 23),
+        role_description="Developer L3",
+        work_mode="OFFSHORE",
+        band="GROUP B2",
         open_positions=1,
         job_description=(
-            "Project Manager L2 for a Java-based enterprise delivery project. "
-            "PMP certified preferred; experience managing cross-functional delivery teams."
+            "Task Description: Technical Competencies:\n"
+            "Experience in structured error analysis, specifically in supporting development "
+            "teams when infrastructure-related issues occur\n"
+            "Knowledge in interface integration and connecting technical systems\n"
+            "Hands-on experience with GitHub Actions pipeline development (Infrastructure as Code)\n"
+            "Good understanding of network technologies\n"
+            "Python skills for scripting and automation\n"
+            "Experience with container technologies (Docker / Podman)\n"
+            "Working knowledge of Linux system administration (services, logs, monitoring, troubleshooting)\n"
+            "Confident use of Linux Shell / Bash for scripting and automation tasks\n"
+            "Work Result: Git, Confluence, etc.\n"
+            "Skill Area: Other\n"
+            "Technology: Other\n"
+            "Proficiency - Technology: Expert\n"
+            "Other Skills: Strong communication skills, structured, self-driven, "
+            "and solution-oriented working style"
         ),
-        role_cluster="PROJECT MANAGER L2",
+        role_cluster="DEVELOPER L3",
     ),
 ]
 
@@ -385,16 +425,16 @@ _MOCK_MATCHES: dict[int, list[MatchResult]] = {
     2: [
         MatchResult(
             rank=1,
-            employee_id="EMP-00002",
-            employee_name="Employee2",
+            employee_id="EMP-00003",
+            employee_name="Employee3",
             similarity_score=88,
-            band="GROUP C1",
-            location="BANGALORE",
-            experience="5Years 6Months",
-            role_name="Data Engineer",
-            skills_iaspire="Python(L4), Azure Data Factory(L3), SQL(L4), Spark(L3)",
-            certified_skills=None,
-            role_cluster="DATA ENGINEER L2",
+            band="GROUP B2",
+            location="MUMBAI",
+            experience="9Years 0Months",
+            role_name="Java Developer",
+            skills_iaspire="Java(L4), Spring Boot(L4), Microservices(L3), AWS(L2)",
+            certified_skills="AWS Certified Developer(L3)",
+            role_cluster="DEVELOPER L3",
             work_mode="OFFSHORE",
         ),
     ],
@@ -442,12 +482,12 @@ _MOCK_MATCHES_PAGE2: dict[int, list[MatchResult]] = {
             employee_name="Employee6",
             similarity_score=60,
             band="GROUP C2",
-            location="PUNE",
+            location="MUMBAI",
             experience="3Years 5Months",
-            role_name="Junior Data Engineer",
-            skills_iaspire="Python(L2), SQL(L3)",
+            role_name="Junior Java Developer",
+            skills_iaspire="Java(L2), SQL(L3)",
             certified_skills=None,
-            role_cluster="DATA ENGINEER L1",
+            role_cluster="DEVELOPER L2",
             work_mode="OFFSHORE",
             below_threshold=True,
         ),
@@ -470,6 +510,31 @@ _MOCK_DEMANDS_BY_ID: dict[int, DemandRecord] = {d.demand_id: d for d in _MOCK_DE
 def _demand_record_to_input(record: DemandRecord) -> DemandRecordInput:
     """Convert an API ``DemandRecord`` to a ``DemandRecordInput`` for completeness validation."""
     return DemandRecordInput(**record.model_dump())
+
+
+def _fetch_demand_from_index(demand_id: int) -> DemandRecord | None:
+    """Fetch a single demand from the AI Search jd-index by ID.
+
+    Returns ``None`` when AI Search is not configured or the document is
+    not found.
+    """
+    search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
+    if not search_endpoint:
+        return None
+    try:
+        search_client = SearchClient(
+            endpoint=search_endpoint,
+            index_name=os.getenv("AZURE_JD_SEARCH_INDEX_NAME", "jd-index"),
+            credential=_get_search_credential(),
+        )
+        doc = search_client.get_document(key=str(demand_id))
+        demand_data = dict(doc)
+        for date_field in ["created_on", "start_date", "end_date"]:
+            if date_field in demand_data and isinstance(demand_data[date_field], str):
+                demand_data[date_field] = date.fromisoformat(demand_data[date_field])
+        return DemandRecord(**demand_data)
+    except Exception:
+        return None
 
 
 def _create_matching_clients() -> tuple[object, object, object] | None:
@@ -549,12 +614,13 @@ async def health() -> dict[str, str]:
 async def list_demands(_user: CurrentUser) -> list[DemandRecord]:
     """Return all open demand records from AI Search.
 
-    Falls back to mock data when Azure AI Search is not configured.
+    Falls back to in-memory demands when Azure AI Search is not configured
+    or when the query fails.
     """
     search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
     if not search_endpoint:
-        logger.warning("AZURE_SEARCH_ENDPOINT not configured, returning mock data")
-        return _MOCK_DEMANDS
+        logger.warning("AZURE_SEARCH_ENDPOINT not configured, returning in-memory demands")
+        return list(_MOCK_DEMANDS_BY_ID.values())
 
     try:
         search_client = SearchClient(
@@ -589,8 +655,8 @@ async def list_demands(_user: CurrentUser) -> list[DemandRecord]:
 
     except Exception as e:
         logger.error("Failed to fetch demands from AI Search: %s", e)
-        # Fall back to mock data on error
-        return _MOCK_DEMANDS
+        # Fall back to in-memory demands (only what was POSTed this session)
+        return list(_MOCK_DEMANDS_BY_ID.values())
 
 
 @app.post(
@@ -600,7 +666,46 @@ async def list_demands(_user: CurrentUser) -> list[DemandRecord]:
     tags=["demands"],
 )
 async def create_demand(demand: DemandRecord, _user: CurrentUser) -> DemandRecord:
-    """Accept a new demand record (stub — echoes the submitted record back)."""
+    """Accept a new demand record, persist it in-memory, and index the JD.
+
+    Stores the demand in the in-memory lookup and, when Azure services are
+    configured, vectorizes and indexes the JD into AI Search.  Matching is
+    not triggered here — use ``POST /events/jd`` to run the full pipeline.
+    """
+    # Persist in the in-memory store so /demands and /events/jd can find it.
+    _MOCK_DEMANDS_BY_ID[demand.demand_id] = demand
+    if demand not in _MOCK_DEMANDS:
+        _MOCK_DEMANDS.append(demand)
+
+    # Validate completeness ≥ 70% (FR-003 / SP1-007).
+    demand_input = _demand_record_to_input(demand)
+    try:
+        validate_demand_completeness(demand_input)
+    except IncompleteDemandError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+
+    # Vectorize and index the JD when Azure services are available.
+    clients = _create_matching_clients()
+    if clients is not None:
+        openai_client, _supply_search_client, jd_search_client = clients
+
+        jd_result = vectorize_and_index_jd(demand, openai_client, jd_search_client)
+        if jd_result.status == "failed":
+            logger.error(
+                "create_demand vectorize_failed demand_id=%s reason=%s",
+                demand.demand_id,
+                jd_result.reason,
+            )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"JD vectorization failed: {jd_result.reason}",
+            )
+
+        logger.info("create_demand indexed demand_id=%s", demand.demand_id)
+
     return demand
 
 
@@ -616,37 +721,98 @@ async def get_demand_matches(
 ) -> MatchResultsResponse:
     """Return ranked match results for the given demand.
 
-    Serves from the Search Result DB when results have been pre-computed by
-    the JD event pipeline (SP2-007).  Falls back to mock data when the result
-    store has no entry for the demand ID.
+    When Azure AI Search is configured, serves exclusively from the Search
+    Result DB.  Returns ``NO_RESULTS`` when the demand exists in the index
+    but matching has not yet been run.
 
-    Returns 404 when the demand ID is not found in either source.
-    Returns NO_RESULTS status when the demand exists but no candidates met
-    the 70% similarity threshold.
+    When AI Search is *not* configured, returns mock data.
     """
-    result_store = get_result_store()
+    search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
 
-    # Prefer real matching results from the Search Result DB.
-    if result_store.demand_exists(demand_id):
-        stored = result_store.get_results(demand_id)
-        if page == 1:
-            real_results = [_stored_to_match_result(r) for r in (stored or [])]
-            match_status = "READY" if real_results else "NO_RESULTS"
-            # Pagination (SP3-006) deferred — page 2 not supported here yet.
-            has_more = False
-        else:
-            real_results = []
-            match_status = "NO_RESULTS"
-            has_more = False
+    if search_endpoint:
+        # ── AI Search path ─────────────────────────────────────────────
+        result_store = get_result_store()
+
+        if result_store.demand_exists(demand_id):
+            stored = result_store.get_results(demand_id)
+            if page == 1:
+                real_results = [_stored_to_match_result(r) for r in (stored or [])]
+                match_status = "READY" if real_results else "NO_RESULTS"
+                has_more = False
+            else:
+                real_results = []
+                match_status = "NO_RESULTS"
+                has_more = False
+            return MatchResultsResponse(
+                demand_id=demand_id,
+                status=match_status,
+                page=page,
+                has_more=has_more,
+                results=real_results,
+            )
+
+        # Demand exists in the jd-index but matching hasn't run yet — run it now.
+        demand = _MOCK_DEMANDS_BY_ID.get(demand_id) or _fetch_demand_from_index(demand_id)
+        if demand is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Demand {demand_id} not found",
+            )
+
+        clients = _create_matching_clients()
+        if clients is None:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Azure services not configured for matching.",
+            )
+        openai_client, supply_search_client, _jd_client = clients
+
+        candidates = dense_retrieval(demand, openai_client, supply_search_client)
+        passing = apply_threshold(candidates)
+        shortlist = rank_shortlist(passing)
+
+        now = datetime.now(timezone.utc).isoformat()
+        strategy = os.getenv("RETRIEVAL_STRATEGY", "dense")
+        stored_results = [
+            StoredMatchResult(
+                demand_id=demand.demand_id,
+                employee_id=c.employee_id,
+                similarity_raw=c.similarity_raw,
+                similarity=c.similarity,
+                score_percent=c.score_percent,
+                rank=c.rank,
+                retrieval_strategy=strategy,
+                timestamp=now,
+                employee_name=c.document.get("employee_name", ""),
+                band=c.document.get("band", ""),
+                location=c.document.get("location", ""),
+                experience=c.document.get("experience", ""),
+                work_mode=c.document.get("work_mode", ""),
+                role_name=c.document.get("role_name"),
+                skills_iaspire=c.document.get("skills_iaspire"),
+                certified_skills=c.document.get("certified_skills"),
+                role_cluster=c.document.get("role_cluster"),
+            )
+            for c in shortlist
+        ]
+        result_store.upsert_results(demand.demand_id, stored_results)
+        logger.info(
+            "get_demand_matches ran matching on-the-fly demand_id=%s results=%d",
+            demand_id,
+            len(stored_results),
+        )
+
+        real_results = [_stored_to_match_result(r) for r in stored_results]
+        match_status = "READY" if real_results else "NO_RESULTS"
         return MatchResultsResponse(
             demand_id=demand_id,
             status=match_status,
             page=page,
-            has_more=has_more,
-            results=real_results,
+            has_more=False,
+            results=real_results if page == 1 else [],
         )
 
-    # Fall back to mock data for demands not yet processed by the pipeline.
+    # ── Mock data path (no AI Search configured) ───────────────────────
     if demand_id not in _MOCK_MATCHES:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -659,7 +825,7 @@ async def get_demand_matches(
     else:
         results = _MOCK_MATCHES_PAGE2.get(demand_id, [])
         match_status = "READY" if results else "NO_RESULTS"
-        has_more = False  # Mock data only has two pages
+        has_more = False
     return MatchResultsResponse(
         demand_id=demand_id,
         status=match_status,
@@ -780,8 +946,10 @@ async def receive_jd_event(
     )
 
     if payload.event_type == JDEventType.ADDED:
-        # Step 1: look up the demand record.
+        # Step 1: look up the demand record (in-memory first, then AI Search).
         demand = _MOCK_DEMANDS_BY_ID.get(payload.demand_id)
+        if demand is None:
+            demand = _fetch_demand_from_index(payload.demand_id)
         if demand is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
