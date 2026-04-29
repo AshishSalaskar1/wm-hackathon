@@ -69,23 +69,9 @@ cp .env.example .env
 ### 2. Install Python dependencies
 
 ```bash
-# Install runtime + dev extras directly into your active Python environment
-pip install fastapi "uvicorn[standard]" pydantic httpx pytest pytest-asyncio
+# Install all dependencies including dev extras
+uv sync
 ```
-
-> **Virtual environment (recommended for isolation)**
->
-> ```bash
-> python -m venv .venv
-> # Windows
-> .venv\Scripts\activate
-> # macOS / Linux
-> source .venv/bin/activate
-> pip install fastapi "uvicorn[standard]" pydantic httpx pytest pytest-asyncio
-> ```
->
-> `pip install -e ".[dev]"` requires setuptools ≥ 68 with `build_editable` support.
-> If your Python is 3.14 and that command fails, use the explicit package list above.
 
 ### 3. Install frontend dependencies
 
@@ -98,7 +84,7 @@ cd ../..
 ### 4. Run the backend API (dev mode)
 
 ```bash
-uvicorn src.backend.api.main:app --reload --port 8000
+uv run uvicorn src.backend.api.main:app --reload --port 8000
 ```
 
 API is available at <http://localhost:8000>.
@@ -135,19 +121,17 @@ UI is available at <http://localhost:3000>.
 
 ```bash
 # Run all unit tests
-python -m pytest tests/unit -v
+uv run pytest tests/unit -v
 
 # Run a specific test file
-python -m pytest tests/unit/test_api_stubs.py -v
+uv run pytest tests/unit/test_api_stubs.py -v
 
 # Linting (requires ruff)
-python -m ruff check src/backend tests
+uv run ruff check src/backend tests
 
 # Type check (requires mypy)
-python -m mypy src/backend
+uv run mypy src/backend
 ```
-
-> **Windows note:** if `pytest` is not on your `PATH`, use `python -m pytest` as shown above.
 
 Expected output for a clean run:
 
